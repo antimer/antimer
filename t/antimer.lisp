@@ -5,4 +5,4 @@
 (in-package :antimer-test)
 
 (defun run-tests ()
-  (run! 'antimer-test.search:search))
+  t)
