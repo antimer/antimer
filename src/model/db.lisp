@@ -2,6 +2,7 @@
 (defpackage antimer.model.db
   (:use :cl)
   (:export :database
+           :create-database
            :connect
            :disconnect
            :*db*)
@@ -11,6 +12,9 @@
 (defclass database ()
   ()
   (:documentation "The base class of Antimer databases."))
+
+(defgeneric create-database (database)
+  (:documentation "Create the database."))
 
 (defgeneric connect (database)
   (:documentation "Connect to the database."))
