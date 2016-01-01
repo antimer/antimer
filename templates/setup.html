@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <main class="form">
+    <h1>Welcome to Antimer!</h1>
+    <form action="/setup" method="post">
+      <fieldset>
+        <legend>Basic Settings</legend>
+        <input name="name" placeholder="Wiki name" type="text">
+      </fieldset>
+      <fieldset>
+        <legend>Administrator</legend>
+        <div class="desc">
+          Configure the settings of the Administrator user.
+        </div>
+        <input name="username" placeholder="Username" type="text">
+        <input name="email" placeholder="Email" type="email">
+        <input name="password" placeholder="Password" type="password">
+      </fieldset>
+      <input type="submit" value="Complete Setup">
+    </form>
+  </main>
+{% endblock %}
