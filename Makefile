@@ -4,7 +4,7 @@ lisp = $(cl) $(clflags)
 
 src = *.asd src/*.lisp
 bin = antimer
-system = antimer-cli
+system = antimer
 
 PREFIX=/usr
 bindir=$(PREFIX)/bin
