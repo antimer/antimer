@@ -2,6 +2,7 @@
 (defpackage antimer.event
   (:use :cl)
   (:export :event
+           :send
            :startup
            :shutdown
            :send)
@@ -12,6 +13,9 @@
   ()
   (:documentation "The base class of all events."))
 
+(defgeneric send (event)
+  (:documentation "Send an event."))
+
 ;;; Built-in events
 
 (defclass startup ()
@@ -21,6 +25,3 @@
 (defclass shutdown ()
   ()
   (:documentation "Emitted when the server is shut down."))
-
-(defgeneric send (event)
-  (:documentation "Send an event."))
