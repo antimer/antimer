@@ -17,7 +17,9 @@
                 :serial t
                 :components
                 ((:file "event")
-                 (:file "plugin"))))
+                 (:file "wiki")
+                 (:file "plugin")
+                 (:file "db"))))
   :description "A wiki."
   :long-description
   #.(uiop:read-file-string

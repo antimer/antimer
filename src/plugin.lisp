@@ -55,7 +55,11 @@ Example:
     nil))
 
 (defmethod data-directory ((plugin plugin))
-  "The absolute pathname to the plugin's data directory.")
+  "The absolute pathname to the plugin's data directory."
+  (with-slots (directory-name) plugin
+    (uiop:merge-pathnames* (make-pathname :directory (list :relative
+                                                           directory-name))
+                           (antimer.wiki:wiki-directory antimer.wiki:*wiki*))))
 
 (defgeneric on-event (plugin event)
   (:documentation "Respond to an event.
