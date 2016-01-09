@@ -4,7 +4,7 @@ lisp = $(cl) $(clflags)
 
 src = *.asd src/*.lisp
 bin = antimer
-system = antimer-cmd
+system = antimer-cli
 
 PREFIX=/usr
 bindir=$(PREFIX)/bin
@@ -14,7 +14,7 @@ all: $(bin)
 
 $(bin): $(src)
 	@echo "Building executable"
-	$(lisp) --eval "(asdf:oos 'asdf:program-op :antimer-cmd)"
+	$(lisp) --eval "(asdf:oos 'asdf:program-op :$(system))"
 
 clean:
 	rm $(bin)
