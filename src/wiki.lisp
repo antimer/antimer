@@ -1,11 +1,14 @@
 (in-package :cl-user)
 (defpackage antimer.wiki
   (:use :cl)
-  (:export :wiki
+  (:export :*wiki*
+           :wiki
            :wiki-directory
-           :*wiki*)
+           :start)
   (:documentation "The wiki object."))
 (in-package :antimer.wiki)
+
+(defvar *wiki*)
 
 (defclass wiki ()
   ((directory :reader wiki-directory
@@ -18,4 +21,5 @@
             :documentation "A list of plugin instances."))
   (:documentation "A wiki."))
 
-(defvar *wiki*)
+(defgeneric start (wiki)
+  (:documentation "Start the wiki."))

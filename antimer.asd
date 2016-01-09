@@ -19,7 +19,8 @@
                 ((:file "event")
                  (:file "wiki")
                  (:file "plugin")
-                 (:file "db"))))
+                 (:file "db")
+                 (:file "antimer"))))
   :description "A wiki."
   :long-description
   #.(uiop:read-file-string
