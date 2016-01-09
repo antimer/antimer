@@ -12,7 +12,5 @@
   :entry-point "antimer.cli:main"
   :components ((:module "src"
                 :components
-                ((:module "cli"
-                  :components
-                  ((:file "cli"))))))
+                ((:file "cli"))))
   :description "Command-line interface for Antimer.")
