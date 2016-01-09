@@ -18,10 +18,10 @@
 
 ;;; Built-in events
 
-(defclass startup ()
+(defclass startup (event)
   ()
   (:documentation "Emitted when the server is started."))
 
-(defclass shutdown ()
+(defclass shutdown (event)
   ()
   (:documentation "Emitted when the server is shut down."))
