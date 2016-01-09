@@ -25,12 +25,12 @@
 
 ;;; Plugin definition
 
-(defclass database ()
+(defclass database (plugin)
   ((session :accessor plugin-session
             :type crane:session
             :documentation "The Crane session object."))
   (:default-initargs
-   :directory #p"db/")
+   :directory-name "db")
   (:documentation "The @c(database) plugin provides an SQL database for Antimer."))
 
 (defmethod name ((plugin database))

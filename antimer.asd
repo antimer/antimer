@@ -28,7 +28,7 @@
                  (:file "wiki")
                  (:file "plugin")
                  (:file "db")
-                 (:file "start")
+                 (:file "wiki-methods")
                  (:file "cli"))))
   :description "A wiki."
   :long-description

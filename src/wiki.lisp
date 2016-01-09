@@ -4,7 +4,8 @@
   (:export :*wiki*
            :wiki
            :wiki-directory
-           :start)
+           :start
+           :apply-events)
   (:documentation "The wiki object."))
 (in-package :antimer.wiki)
 
@@ -23,3 +24,7 @@
 
 (defgeneric start (wiki)
   (:documentation "Start the wiki."))
+
+(defgeneric apply-events (wiki event)
+  (:documentation "Go through every plugin in the wiki, sending an event to
+  it."))
