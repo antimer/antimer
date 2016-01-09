@@ -10,6 +10,7 @@
                ;; Database
                :crane
                :cl-pass
+               :dbi-sqlite3
                ;; Web interface
                :lucerne
                :clack-handler-hunchentoot
