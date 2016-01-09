@@ -10,11 +10,10 @@
 (in-package :antimer.plugin)
 
 (defclass plugin ()
-  ((directory :reader plugin-directory
-              :initarg :directory
-              :type pathname
-              :documentation "The directory where the plugin's data will be
-              stored, if necessary.
+  ((directory-name :reader plugin-directory-name
+                   :initarg :directory-name
+                   :type string
+                   :documentation "The name of the plugin's data directory.
 
 Subclasses should specialize this using @c(:default-initargs)."))
   (:documentation "The base class of Antimer plugins."))
@@ -54,6 +53,9 @@ Example:
   (:method ((plugin plugin))
     "The default method: return @c(nil)."
     nil))
+
+(defmethod data-directory ((plugin plugin))
+  "The absolute pathname to the plugin's data directory.")
 
 (defgeneric on-event (plugin event)
   (:documentation "Respond to an event.
