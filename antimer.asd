@@ -9,13 +9,15 @@
   :depends-on (:common-doc
                :lucerne
                :clack-handler-hunchentoot
-               :antimer-model)
+               :antimer-db)
   :components ((:module "src"
-                :serial t
                 :components
-                ((:file "wiki")
-                 (:file "app")
-                 (:file "antimer"))))
+                ((:module "core"
+                  :serial t
+                  :components
+                  ((:file "wiki")
+                   (:file "app")
+                   (:file "antimer"))))))
   :description "A wiki."
   :long-description
   #.(uiop:read-file-string
