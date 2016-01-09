@@ -1,14 +1,14 @@
-(defsystem antimer-model
+(defsystem antimer-db
   :author "Fernando Borretti <eudoxiahp@gmail.com>"
   :maintainer "Fernando Borretti <eudoxiahp@gmail.com>"
   :license "MIT"
   :version "0.1"
-  :depends-on (:local-time)
+  :depends-on (:integral
+               :local-time)
   :components ((:module "src"
                 :components
-                ((:module "model"
+                ((:module "db"
                   :serial t
                   :components
-                  ((:file "model")
-                   (:file "db"))))))
+                  ()))))
   :description "Models and database access for Antimer.")
