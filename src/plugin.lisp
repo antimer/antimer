@@ -2,6 +2,7 @@
 (defpackage antimer.plugin
   (:use :cl)
   (:export :plugin
+           :plugin-directory
            :name
            :short-description
            :on-event)
@@ -9,7 +10,13 @@
 (in-package :antimer.plugin)
 
 (defclass plugin ()
-  ()
+  ((directory :reader plugin-directory
+              :initarg :directory
+              :type pathname
+              :documentation "The directory where the plugin's data will be
+              stored, if necessary.
+
+Subclasses should specialize this using @c(:default-initargs)."))
   (:documentation "The base class of Antimer plugins."))
 
 (defgeneric name (plugin)
