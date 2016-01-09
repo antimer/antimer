@@ -1,12 +1,5 @@
-(in-package :cl-user)
-(defpackage antimer
-  (:use :cl)
-  (:import-from :antimer.wiki
-                :*wiki*
-                :wiki
-                :start)
-  (:documentation "The top-level loop."))
-(in-package :antimer)
+;;;; Implement some wiki operations
+(in-package :antimer.wiki)
 
 (defmethod start ((wiki wiki))
   (let ((port 8000)
