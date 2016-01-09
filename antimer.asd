@@ -7,17 +7,17 @@
   :bug-tracker ""
   :source-control (:git "")
   :depends-on (:common-doc
+               ;; Database
+               :crane
+               :cl-pass
+               ;; Web interface
                :lucerne
-               :clack-handler-hunchentoot
-               :antimer-db)
+               :clack-handler-hunchentoot)
   :components ((:module "src"
+                :serial t
                 :components
-                ((:module "core"
-                  :serial t
-                  :components
-                  ((:file "wiki")
-                   (:file "app")
-                   (:file "antimer"))))))
+                ((:file "event")
+                 (:file "plugin"))))
   :description "A wiki."
   :long-description
   #.(uiop:read-file-string
