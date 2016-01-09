@@ -1,4 +1,4 @@
-(defsystem antimer-cmd
+(defsystem antimer-cli
   :author "Fernando Borretti <eudoxiahp@gmail.com>"
   :maintainer "Fernando Borretti <eudoxiahp@gmail.com>"
   :license "MIT"
@@ -9,8 +9,10 @@
                :uiop)
   :build-operation program-op
   :build-pathname "antimer"
-  :entry-point "antimer.cmd:main"
+  :entry-point "antimer.cli:main"
   :components ((:module "src"
                 :components
-                ((:file "command-line"))))
+                ((:module "cli"
+                  :components
+                  ((:file "cli"))))))
   :description "Command-line interface for Antimer.")
