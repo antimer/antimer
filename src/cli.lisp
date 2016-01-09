@@ -27,8 +27,11 @@
 
 (defun serve ()
   "The serve command."
-  (antimer.wiki:start (make-instance 'antimer.wiki:wiki
-                                     :directory (uiop:getcwd))))
+  (antimer.wiki:start
+   (make-instance 'antimer.wiki:wiki
+                  :directory (uiop:getcwd)
+                  :plugins (list
+                            (make-instance 'antimer.db:database)))))
 
 (defun entry (&key help version arguments)
   (let ((command (first arguments)))

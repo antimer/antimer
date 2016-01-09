@@ -12,7 +12,15 @@
                :cl-pass
                ;; Web interface
                :lucerne
-               :clack-handler-hunchentoot)
+               :clack-handler-hunchentoot
+               ;; Command line
+               :command-line-arguments
+               ;; Utilities
+               :uiop
+               :alexandria)
+  :build-operation program-op
+  :build-pathname "antimer"
+  :entry-point "antimer.cli:main"
   :components ((:module "src"
                 :serial t
                 :components
@@ -20,7 +28,8 @@
                  (:file "wiki")
                  (:file "plugin")
                  (:file "db")
-                 (:file "antimer"))))
+                 (:file "start")
+                 (:file "cli"))))
   :description "A wiki."
   :long-description
   #.(uiop:read-file-string
