@@ -5,6 +5,7 @@
            :plugin-directory
            :name
            :short-description
+           :data-directory
            :on-event)
   (:documentation "Antimer's plugin system."))
 (in-package :antimer.plugin)

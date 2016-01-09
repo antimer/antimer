@@ -4,10 +4,8 @@
 (defmethod start ((wiki wiki))
   (let ((port 8000)
         (*wiki* wiki))
-    (format t "Starting wiki on port ~D" port)
     (send (make-instance 'antimer.event:startup))
     ;(lucerne:start antimer.app:app :port port)
-    (format t "Server started~%")
     (loop (read))))
 
 (defmethod apply-events ((wiki wiki) (event antimer.event:event))
@@ -17,3 +15,8 @@
 
 (defmethod send ((event antimer.event:event))
   (apply-events *wiki* event))
+
+(defmethod antimer.plugin:on-event :before ((plugin antimer.plugin:plugin)
+                                            (event antimer.event:startup))
+  (ensure-directories-exist
+   (antimer.plugin:data-directory plugin)))
