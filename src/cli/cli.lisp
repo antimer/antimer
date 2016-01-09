@@ -1,9 +1,9 @@
 (in-package :cl-user)
-(defpackage antimer.cmd
+(defpackage antimer.cli
   (:use :cl)
   (:export :main)
   (:documentation "The command-line interface."))
-(in-package :antimer.cmd)
+(in-package :antimer.cli)
 
 (defparameter +version+
   #.(asdf:component-version (asdf:find-system :saga)))
