@@ -12,15 +12,15 @@
 (in-suite database)
 
 (test user
-   (let ((user (antimer.db:create-user "test"
-                                       :email "test@gmail.com"
-                                       :plaintext-password "test")))
-     (is
-      (typep user 'antimer.db:user))
-     (is
-      (typep (antimer.db:find-user "test") 'antimer.db:user))
-     (is
-      (null (antimer.db:find-user "nonexistent")))))
+  (let ((user (antimer.db:create-user "test"
+                                      :email "test@gmail.com"
+                                      :plaintext-password "test")))
+    (is
+     (typep user 'antimer.db:user))
+    (is
+     (typep (antimer.db:find-user "test") 'antimer.db:user))
+    (is
+     (null (antimer.db:find-user "nonexistent")))))
 
 (defun run-tests ()
   (ensure-directories-exist +wiki-dir+)
@@ -30,4 +30,5 @@
                                        (make-instance 'antimer.db:database)))))
     (antimer.wiki:start wiki)
     (run! 'database))
-  (uiop:delete-directory-tree +wiki-dir+ :validate t))
+  ;(uiop:delete-directory-tree +wiki-dir+ :validate t)
+  t)
