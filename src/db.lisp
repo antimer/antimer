@@ -22,7 +22,8 @@
            :user-password
            :user-admin-p
            :create-user
-           :find-user)
+           :find-user
+           :check-password)
   (:documentation "Antimer's relational database interface."))
 (in-package :antimer.db)
 
@@ -81,6 +82,10 @@
 (defun find-user (username)
   "Find a user by their username. Return NIL if nothing is found."
   (crane:single 'user `(:= :username ,username)))
+
+(defun check-password (user password)
+  "Check if a password matches."
+  (cl-pass:check-password password (user-password user)))
 
 ;;; Events
 
