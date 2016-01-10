@@ -17,11 +17,12 @@
                 :bool)
   (:export :database
            :user
-           :create-user
            :user-username
            :user-email
            :user-password
-           :user-admin-p)
+           :user-admin-p
+           :create-user
+           :find-user)
   (:documentation "Antimer's relational database interface."))
 (in-package :antimer.db)
 
@@ -76,6 +77,10 @@
                                         :iterations 200000)
                 :adminp adminp
                 :token (uuid:format-as-urn nil (uuid:make-v4-uuid))))
+
+(defun find-user (username)
+  "Find a user by their username. Return NIL if nothing is found."
+  (crane:single 'user `(:= :username username)))
 
 ;;; Events
 
