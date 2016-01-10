@@ -14,6 +14,7 @@
                :uuid
                ;; Web interface
                :lucerne
+               :lucerne-auth
                :clack-handler-hunchentoot
                ;; Command line
                :command-line-arguments
