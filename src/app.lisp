@@ -63,14 +63,14 @@
 @route app (:post "/login")
 (defview post-login ()
   (flet ((render-error (message)
-           (render-template (+register+)
+           (render-template (+login+)
                             :error message)))
     (with-params (username password)
       (let ((user (antimer.db:find-user username)))
         (cond
           ((null user)
            (render-error "No user with that username."))
-          ((antimer.db:check-password user pasword)
+          ((antimer.db:check-password user password)
            ;; Success!
            (lucerne-auth:login username)
            (redirect "/"))
