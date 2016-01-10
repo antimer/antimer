@@ -44,6 +44,7 @@
 
 (defun prompt (text)
   (format t "~A: " text)
+  (finish-output)
   (read-line))
 
 (defun make-admin ()
