@@ -5,6 +5,7 @@
            :wiki
            :wiki-directory
            :start
+           :stop
            :apply-events)
   (:documentation "The wiki object."))
 (in-package :antimer.wiki)
@@ -24,6 +25,9 @@
 
 (defgeneric start (wiki)
   (:documentation "Start the wiki."))
+
+(defgeneric stop (wiki)
+  (:documentation "Send the shutdown event to every plugin."))
 
 (defgeneric apply-events (wiki event)
   (:documentation "Go through every plugin in the wiki, sending an event to

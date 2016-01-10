@@ -33,5 +33,6 @@
                              :plugins (list
                                        (make-instance 'antimer.db:database)))))
     (antimer.wiki:start wiki)
-    (run! 'database))
+    (run! 'database)
+    (antimer.wiki:stop wiki))
   (uiop:delete-directory-tree +wiki-dir+ :validate t))

@@ -2,9 +2,11 @@
 (in-package :antimer.wiki)
 
 (defmethod start ((wiki wiki))
-  (let ((port 8000)
-        (*wiki* wiki))
-    (send (make-instance 'antimer.event:startup))))
+  (setf *wiki* wiki)
+  (send (make-instance 'antimer.event:startup)))
+
+(defmethod stop ((wiki wiki))
+  (send (make-instance 'antimer.event:shutdown)))
 
 (defmethod apply-events ((wiki wiki) (event antimer.event:event))
   (with-slots (plugins) wiki
