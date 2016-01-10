@@ -4,9 +4,7 @@
 (defmethod start ((wiki wiki))
   (let ((port 8000)
         (*wiki* wiki))
-    (send (make-instance 'antimer.event:startup))
-    ;(lucerne:start antimer.app:app :port port)
-    (loop (read))))
+    (send (make-instance 'antimer.event:startup))))
 
 (defmethod apply-events ((wiki wiki) (event antimer.event:event))
   (with-slots (plugins) wiki
