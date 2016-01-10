@@ -27,15 +27,40 @@
   (format t "~%Options:~%")
   (command-line-arguments:show-option-help +options+)
   (format t "~%Commands:
-  serve     Run the server~%"))
+  serve        Run the server
+  make-admin   Create an administrator user~%"))
+
+(defmacro with-wiki ((wiki) &body body)
+  `(let ((,wiki (make-instance 'antimer.wiki:wiki
+                               :directory (uiop:getcwd)
+                               :plugins (list
+                                         (make-instance 'antimer.db:database)))))
+     ,@body))
 
 (defun serve ()
   "The serve command."
-  (antimer.wiki:start
-   (make-instance 'antimer.wiki:wiki
-                  :directory (uiop:getcwd)
-                  :plugins (list
-                            (make-instance 'antimer.db:database)))))
+  (with-wiki (wiki)
+    (antimer.wiki:start wiki)))
+
+(defun prompt (text)
+  (format t "~A: " text)
+  (read-line))
+
+(defun make-admin ()
+  "The make-admin command."
+  (with-wiki (wiki)
+    (antimer.wiki:start wiki)
+    (let ((username (prompt "Username"))
+          (email (prompt "Email"))
+          (password (prompt "Password"))
+          (password-repeat (prompt "Repeat password")))
+      (unless (string= password password-repeat)
+        (error "Passwords don't match."))
+      (let ((user (antimer.db:make-user username
+                                        :email email
+                                        :plaintext-password password
+                                        :adminp t)))
+        (crane:create-instance user)))))
 
 (defun entry (&key help version arguments)
   (let ((command (first arguments)))
@@ -43,6 +68,8 @@
         (alexandria:switch (command :test #'string=)
           ("serve"
            (serve))
+          ("make-admin"
+           (make-admin))
           (t
            (error "Unknown command: ~A" command)))
         (cond
