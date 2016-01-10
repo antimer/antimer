@@ -80,7 +80,7 @@
 
 (defun find-user (username)
   "Find a user by their username. Return NIL if nothing is found."
-  (crane:single 'user `(:= :username username)))
+  (crane:single 'user `(:= :username ,username)))
 
 ;;; Events
 
