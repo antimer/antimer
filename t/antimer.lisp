@@ -20,7 +20,11 @@
     (is
      (typep (antimer.db:find-user "test") 'antimer.db:user))
     (is
-     (null (antimer.db:find-user "nonexistent")))))
+     (null (antimer.db:find-user "nonexistent")))
+    (is-true
+     (antimer.db:check-password user "test"))
+    (is-false
+     (antimer.db:check-password user "test2"))))
 
 (defun run-tests ()
   (ensure-directories-exist +wiki-dir+)
@@ -30,5 +34,4 @@
                                        (make-instance 'antimer.db:database)))))
     (antimer.wiki:start wiki)
     (run! 'database))
-  ;(uiop:delete-directory-tree +wiki-dir+ :validate t)
-  t)
+  (uiop:delete-directory-tree +wiki-dir+ :validate t))
