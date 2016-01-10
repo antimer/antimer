@@ -40,7 +40,10 @@
 (defun serve ()
   "The serve command."
   (with-wiki (wiki)
-    (antimer.wiki:start wiki)))
+    (antimer.wiki:start wiki)
+    (lucerne:start antimer.app:app :port 8000)
+    ;; Wait forever
+    (loop (read))))
 
 (defun prompt (text)
   (format t "~A: " text)
@@ -87,6 +90,7 @@
         #'(lambda (condition hook)
             (declare (ignore hook))
             (format *error-output* "Error: ~A~%" condition)
+            (finish-output *error-output*)
             (uiop:quit -1)))
   (command-line-arguments:handle-command-line
    +options+
