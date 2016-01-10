@@ -49,6 +49,8 @@
          (render-error "Forgot email."))
         ((null password)
          (render-error "Forgot password."))
+        ((antimer.db:find-user username)
+         (render-error "A user with that username already exists."))
         (t
          (antimer.db:create-user username
                                  :email email

@@ -43,7 +43,7 @@
     (antimer.wiki:start wiki)
     (lucerne:start antimer.app:app :port 8000)
     ;; Wait forever
-    (loop (sleep 1000))
+    (loop (sleep 1))
     (antimer.wiki:stop wiki)))
 
 (defun prompt (text)
