@@ -68,14 +68,14 @@
 
 (defun make-user (username &key email plaintext-password adminp)
   "Create a user instance. Hash the password in the process."
-  (make-instance 'user
-                 :username username
-                 :email email
-                 :password (cl-pass:hash plaintext-password
-                                         :type :pbkdf2-sha256
-                                         :iterations 200000)
-                 :adminp adminp
-                 :token (uuid:format-as-urn nil (uuid:make-v4-uuid))))
+  (crane:create 'user
+                :username username
+                :email email
+                :password (cl-pass:hash plaintext-password
+                                        :type :pbkdf2-sha256
+                                        :iterations 200000)
+                :adminp adminp
+                :token (uuid:format-as-urn nil (uuid:make-v4-uuid))))
 
 ;;; Events
 
