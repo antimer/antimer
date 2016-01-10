@@ -60,7 +60,6 @@
    (adminp :reader user-admin-p
            :initarg :adminp
            :type bool
-           :nullp t
            :documentation "Is the user an administrator?")
    (token :reader user-api-token
           :initarg :token
