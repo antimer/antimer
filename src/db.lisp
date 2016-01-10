@@ -13,13 +13,15 @@
   (:import-from :crane
                 :make-session
                 :deftable
-                :text)
+                :text
+                :bool)
   (:export :database
            :user
            :make-user
            :user-username
            :user-email
-           :user-password)
+           :user-password
+           :user-admin-p)
   (:documentation "Antimer's relational database interface."))
 (in-package :antimer.db)
 
@@ -53,17 +55,22 @@
    (password :reader user-password
              :initarg :password
              :type text
-             :documentation "The user's hashed password."))
+             :documentation "The user's hashed password.")
+   (adminp :reader user-admin-p
+           :initarg :adminp
+           :type bool
+           :documentation "Is the user an administrator?"))
   (:documentation "Represents a user."))
 
-(defun make-user (username &key email plaintext-password)
+(defun make-user (username &key email plaintext-password adminp)
   "Create a user instance. Hash the password in the process."
   (make-instance 'user
                  :username username
                  :email email
                  :password (cl-pass:hash plaintext-password
                                          :type :pbkdf2-sha256
-                                         :iterations 200000)))
+                                         :iterations 200000)
+                 :adminp adminp))
 
 ;;; Events
 
