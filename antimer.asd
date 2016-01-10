@@ -11,6 +11,7 @@
                :crane
                :cl-pass
                :dbd-sqlite3
+               :uuid
                ;; Web interface
                :lucerne
                :clack-handler-hunchentoot
