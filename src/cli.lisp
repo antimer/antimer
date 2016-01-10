@@ -5,6 +5,8 @@
   (:documentation "The command-line interface."))
 (in-package :antimer.cli)
 
+;;; Arguments
+
 (defparameter +version+
   #.(asdf:component-version (asdf:find-system :saga)))
 
@@ -15,6 +17,8 @@
     (("version")
      :type boolean
      :documentation "Show version information and exit.")))
+
+;;; Functions
 
 (defun show-usage ()
   "Show the usage screen."
