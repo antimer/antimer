@@ -30,6 +30,7 @@
                  (:file "plugin")
                  (:file "db")
                  (:file "wiki-methods")
+                 (:file "app")
                  (:file "cli"))))
   :description "A wiki."
   :long-description
