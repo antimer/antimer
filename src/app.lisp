@@ -9,7 +9,8 @@
 ;;; App definition
 
 (defapp app
-  :middlewares ((clack.middleware.static:<clack-middleware-static>
+  :middlewares (clack.middleware.session:<clack-middleware-session>
+                (clack.middleware.static:<clack-middleware-static>
                  :root (asdf:system-relative-pathname :antimer #p"assets/")
                  :path "/static/")))
 
@@ -22,13 +23,18 @@
 (defparameter +register+ (djula:compile-template* "auth/register.html"))
 (defparameter +login+ (djula:compile-template* "auth/login.html"))
 
+(defmacro render-view (template &rest arguments)
+  `(render-template (,template)
+                    :user (lucerne-auth:get-userid)
+                    ,@arguments))
+
 @route app "/"
 (defview index ()
-  (render-template (+index+)))
+  (render-view +index+))
 
 @route app (:get "/register")
 (defview get-register ()
-  (render-template (+register+)))
+  (render-view +register+))
 
 @route app (:post "/register")
 (defview post-register ()
@@ -48,9 +54,14 @@
                                :email email
                                :plaintext-password password)
          (lucerne-auth:login username)
-         (render-template (+index+)
-                          :user username))))))
+         (render-view +index+))))))
 
 @route app (:get "/login")
 (defview get-login ()
-  (render-template (+login+)))
+  (render-view +login+))
+
+@route app (:get "/logout")
+(defview logout ()
+  (when (lucerne-auth:logged-in-p)
+    (lucerne-auth:logout))
+  (redirect "/"))
