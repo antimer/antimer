@@ -60,11 +60,10 @@
           (password-repeat (prompt "Repeat password")))
       (unless (string= password password-repeat)
         (error "Passwords don't match."))
-      (let ((user (antimer.db:make-user username
-                                        :email email
-                                        :plaintext-password password
-                                        :adminp t)))
-        (crane:create-instance user)))))
+      (antimer.db:create-user username
+                              :email email
+                              :plaintext-password password
+                              :adminp t))))
 
 (defun entry (&key help version arguments)
   (let ((command (first arguments)))

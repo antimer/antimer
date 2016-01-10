@@ -17,7 +17,7 @@
                 :bool)
   (:export :database
            :user
-           :make-user
+           :create-user
            :user-username
            :user-email
            :user-password
@@ -66,7 +66,7 @@
           :documentation "The API token."))
   (:documentation "Represents a user."))
 
-(defun make-user (username &key email plaintext-password adminp)
+(defun create-user (username &key email plaintext-password adminp)
   "Create a user instance. Hash the password in the process."
   (crane:create 'user
                 :username username

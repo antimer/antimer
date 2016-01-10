@@ -50,15 +50,20 @@
         ((null password)
          (render-error "Forgot password."))
         (t
-         (antimer.db:make-user username
-                               :email email
-                               :plaintext-password password)
+         (antimer.db:create-user username
+                                 :email email
+                                 :plaintext-password password)
          (lucerne-auth:login username)
          (redirect "/"))))))
 
 @route app (:get "/login")
 (defview get-login ()
   (render-view +login+))
+
+@route app (:post "/login")
+(defview post-login ()
+
+  )
 
 @route app (:get "/logout")
 (defview logout ()
