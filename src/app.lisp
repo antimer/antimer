@@ -54,7 +54,7 @@
                                :email email
                                :plaintext-password password)
          (lucerne-auth:login username)
-         (render-view +index+))))))
+         (redirect "/"))))))
 
 @route app (:get "/login")
 (defview get-login ()
