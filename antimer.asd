@@ -18,9 +18,14 @@
                :clack-handler-hunchentoot
                ;; Command line
                :command-line-arguments
+               ;; Search
+               :searchspace
                ;; Utilities
                :uiop
-               :alexandria)
+               :alexandria
+               :difflib
+               :split-sequence
+               :yason)
   :build-operation program-op
   :build-pathname "antimer"
   :entry-point "antimer.cli:main"
@@ -30,6 +35,8 @@
                 ((:file "event")
                  (:file "wiki")
                  (:file "plugin")
+                 (:file "diff")
+                 (:file "doc")
                  (:file "db")
                  (:file "wiki-methods")
                  (:file "app")
