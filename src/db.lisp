@@ -39,7 +39,9 @@
            :create-article
            :edit-article
            :find-article
-           :number-of-articles
+           :article-count
+           :do-articles
+           :random-article
            :do-changes)
   (:documentation "Antimer's relational database interface."))
 (in-package :antimer.db)
@@ -128,7 +130,7 @@
   ((article :reader change-article
             :initarg :article
             :type int
-            :foreign (article :on-delete :delete :on-update :update)
+            :foreign (article :on-delete :cascade :on-update :cascade)
             :documentation "A foreign key to the article this change belongs to.")
    (user :reader change-user
          :initarg :user
@@ -181,8 +183,31 @@
 (defun find-article (slug)
   (crane:single 'article `(:where (:= :slug ,slug))))
 
-(defun number-of-articles ()
+(defun article-count ()
   (crane:total 'article))
+
+(defun call-with-articles (function results-per-page from)
+  (mapc function (crane:filter 'article
+                               `(:order-by (:asc :title))
+                               `(:limit ,results-per-page)
+                               `(:offset ,from))))
+
+(defmacro do-articles ((article &key (results-per-page 25) (from 0))
+                       &body body)
+  `(call-with-articles #'(lambda (,article)
+                           ,@body)
+                       ,results-per-page
+                       ,from))
+
+(defun random-article ()
+  "Find a random article, or NIL if there are no articles."
+  (let ((count (article-count)))
+    (if (> count 0)
+        (crane:single 'article
+                      `(:order-by :id)
+                      `(:limit 1)
+                      `(:offset ,(random count)))
+        nil)))
 
 (defun call-with-changes (article function results-per-page from)
   (mapc function (crane:filter 'change
