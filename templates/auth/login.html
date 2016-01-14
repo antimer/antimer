@@ -1,15 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Sign in</h1>
-  {% if error %}
-    <div class="error">
-      {{ error }}
-    </div>
-  {% endif %}
-  <form action="/login" method="post">
-    <input name="username" type="text" placeholder="Username">
-    <input name="password" type="password" placeholder="Password">
-    <input type="submit">
-  </form>
+  <main class="auth login">
+    <h1>Sign in</h1>
+    {% if error %}
+      <div class="error">
+        {{ error }}
+      </div>
+    {% endif %}
+    <form action="/login" method="post">
+      <div class="input-group">
+        <label for="username">Username</label>
+        <input name="username" type="text" placeholder="Username">
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input name="password" type="password" placeholder="Password">
+      </div>
+      <input type="submit">
+    </form>
+  </main>
 {% endblock %}
