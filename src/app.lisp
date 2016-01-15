@@ -22,6 +22,11 @@
 (defparameter +index+ (djula:compile-template* "index.html"))
 (defparameter +register+ (djula:compile-template* "auth/register.html"))
 (defparameter +login+ (djula:compile-template* "auth/login.html"))
+(defparameter +new-article+ (djula:compile-template* "article/new.html"))
+(defparameter +article-list+ (djula:compile-template* "article/list.html"))
+(defparameter +view-article+ (djula:compile-template* "article/view.html"))
+
+;;; Views
 
 (defmacro render-view (template &rest arguments)
   `(render-template (,template)
@@ -31,6 +36,65 @@
 @route app "/"
 (defview index ()
   (render-view +index+))
+
+;;; Wiki views
+
+@route app (:get "/article/new")
+(defview get-new-article ()
+  (if (lucerne-auth:logged-in-p)
+      (render-view +new-article+)
+      (render-view +new-article+
+                   :error "You must be logged in to create an article.")))
+
+@route app (:post "/article/new")
+(defview get-new-article ()
+  (if (lucerne-auth:logged-in-p)
+      (flet ((render-error (message)
+               (render-view +new-article+
+                            :error message)))
+        (with-params (title slug source)
+          (cond
+            ((null title)
+             (render-error "Forgot title"))
+            ((null slug)
+             (render-error "Forgot slug"))
+            ((null source)
+             (render-error "Can't create an empty article"))
+            (t
+             ;; Validate everything
+             (let ((user (antimer.db:find-user (lucerne-auth:get-userid))))
+               (antimer.db:create-article title
+                                          slug
+                                          source
+                                          user))
+             (redirect (format nil "/article/~A" slug))))))
+      (render-view +new-article+
+                   :error "You must be logged in to create an article.")))
+
+@route app (:get "/article/all")
+(defview all-articles ()
+  (render-view +article-list+
+               :articles
+               (let ((list (list)))
+                 (antimer.db:do-articles (article)
+                   (push article list))
+                 list)))
+
+@route app (:get "/article/:slug")
+(defview view-article (slug)
+  (flet ((render-error (message)
+           (render-view +view-article+
+                        :error message)))
+    (let ((article (antimer.db:find-article slug)))
+      (if article
+          (render-view +view-article+
+                       :title (antimer.db:article-title article)
+                       :html (antimer.doc:render-document
+                              (antimer.doc:parse-document
+                               (antimer.db:article-source article))))
+          (render-error "No such article.")))))
+
+;;; Authentication views
 
 @route app (:get "/register")
 (defview get-register ()
