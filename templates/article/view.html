@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <main class="article list">
+    <h1>{{ title }}</h1>
+    <article>
+      {{ html | safe }}
+    </article>
+  </main>
+{% endblock %}
