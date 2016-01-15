@@ -6,12 +6,13 @@
   :homepage ""
   :bug-tracker ""
   :source-control (:git "")
-  :depends-on (:common-doc
+  :depends-on (;; Documents
+               :common-doc
+               :pandocl
                ;; Database
                :crane
                :cl-pass
                :dbd-sqlite3
-               :uuid
                ;; Web interface
                :lucerne
                :lucerne-auth
@@ -25,11 +26,18 @@
                :alexandria
                :difflib
                :split-sequence
-               :yason)
+               :yason
+               :uuid)
+  :defsystem-depends-on (:asdf-linguist)
   :build-operation program-op
   :build-pathname "antimer"
   :entry-point "antimer.cli:main"
-  :components ((:module "src"
+  :components ((:module "assets"
+                :components
+                ((:module "css"
+                  :components
+                  ((:sass "main")))))
+               (:module "src"
                 :serial t
                 :components
                 ((:file "event")
