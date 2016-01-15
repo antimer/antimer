@@ -32,7 +32,7 @@
   (let* ((user (antimer.db:find-user "test"))
          (article))
     (is
-     (equal (antimer.db:number-of-articles) 0))
+     (equal (antimer.db:article-count) 0))
     (finishes
      (setf article
            (antimer.db:create-article "My Article"
@@ -40,7 +40,7 @@
                                       "This is the text of the article."
                                       user)))
     (is
-     (equal (antimer.db:number-of-articles) 1))
+     (equal (antimer.db:article-count) 1))
     (is
      (null (antimer.db:find-article "nonexistent-slug")))
     (let ((found (antimer.db:find-article "my-article")))
@@ -82,7 +82,31 @@
                      "Changed some things."))))
         (incf change-count))
       (is
-       (equal change-count 3)))))
+       (equal change-count 3)))
+    ;; Create another
+    (antimer.db:create-article "Another Article"
+                               "another-article"
+                               "Some test text."
+                               user)
+    ;; Verify things
+    (is
+     (= (antimer.db:article-count) 2))
+    (let ((article-count 0))
+      (antimer.db:do-articles (article)
+        ;; Verify lexicographic order
+        (cond
+          ((= article-count 0)
+           (is
+            (string= (antimer.db:article-title article) "Another Article")))
+          ((= article-count 1)
+           (is
+            (string= (antimer.db:article-title article) "My Article"))))
+        (incf article-count))
+      (is
+       (= article-count 2)))
+    (dotimes (i 100)
+      (is
+       (typep (antimer.db:random-article) 'antimer.db:article)))))
 
 (defun run-tests ()
   (unwind-protect
