@@ -9,3 +9,4 @@
 antimer
 assets/css/main.css
 .sass-cache
+*.css.map
