@@ -112,10 +112,11 @@
   (unwind-protect
        (progn
          (ensure-directories-exist +wiki-dir+)
+         (uiop:copy-file (asdf:system-relative-pathname :antimer #p"t/wiki-config.yaml")
+                         (merge-pathnames #p"config.yaml"
+                                          +wiki-dir+))
          (let ((wiki (make-instance 'antimer.wiki:wiki
-                                    :directory +wiki-dir+
-                                    :plugins (list
-                                              (make-instance 'antimer.db:database)))))
+                                    :directory +wiki-dir+)))
            (antimer.wiki:start wiki)
            (run! 'database)
            (antimer.wiki:stop wiki)))
