@@ -1,18 +1,40 @@
 (in-package :cl-user)
-(defpackage antimer.app
+(defpackage antimer.web
   (:use :cl :lucerne)
-  (:export :app)
+  (:import-from :antimer.plugin
+                :plugin
+                :name
+                :short-description
+                :data-directory
+                :on-event)
+  (:import-from :antimer.event
+                :startup
+                :shutdown)
+  (:export :web-app)
   (:documentation "The web application."))
-(in-package :antimer.app)
+(in-package :antimer.web)
 (annot:enable-annot-syntax)
 
-;;; App definition
+;;; Plugin definition
 
 (defapp app
   :middlewares (clack.middleware.session:<clack-middleware-session>
                 (clack.middleware.static:<clack-middleware-static>
                  :root (asdf:system-relative-pathname :antimer #p"assets/")
                  :path "/static/")))
+
+(defclass web-app (plugin)
+  ((port :reader plugin-port
+         :initarg :port
+         :type integer
+         :documentation "The port where the server will run."))
+  (:documentation "The @c(web-app) plugin implements the web interface."))
+
+(defmethod name ((plugin web-app))
+  "Web App")
+
+(defmethod short-description ((plugin web-app))
+  "The web app plugin implements Antimer's web interface.")
 
 ;;; Templates
 
@@ -149,3 +171,17 @@
   (when (lucerne-auth:logged-in-p)
     (lucerne-auth:logout))
   (redirect "/"))
+
+;;; Events
+
+(defmethod on-event ((plugin web-app) (event startup))
+  "On startup, start the server."
+  (start app :port (plugin-port plugin)))
+
+(defmethod on-event ((plugin web-app) (event shutdown))
+  "On shutdown, stop the server."
+  (stop app))
+
+(antimer.config:register-default-plugin
+ (make-instance 'web-app
+                :port 8000))
