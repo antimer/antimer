@@ -32,16 +32,13 @@
 
 (defmacro with-wiki ((wiki) &body body)
   `(let ((,wiki (make-instance 'antimer.wiki:wiki
-                               :directory (uiop:getcwd)
-                               :plugins (list
-                                         (make-instance 'antimer.db:database)))))
+                               :directory (uiop:getcwd))))
      ,@body))
 
 (defun serve ()
   "The serve command."
   (with-wiki (wiki)
     (antimer.wiki:start wiki)
-    (lucerne:start antimer.app:app :port 8000)
     ;; Wait forever
     (unwind-protect
          (loop (sleep 1))
