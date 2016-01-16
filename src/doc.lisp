@@ -30,7 +30,9 @@
   "Apply every transformation needed to a document.
 
 If an error occurs, signal transformation-error."
-  document)
+  (let ((doc (common-doc.macro:expand-macros document)))
+    (setf doc (common-doc.ops:fill-unique-refs doc))
+    doc))
 
 ;;; Rendering
 
