@@ -49,7 +49,11 @@
 ;;; Plugin definition
 
 (defclass database (plugin)
-  ((session :accessor plugin-session
+  ((url :reader plugin-url
+        :initarg :url
+        :type string
+        :documentation "A Crane database URL.")
+   (session :accessor plugin-session
             :type crane:session
             :documentation "The Crane session object."))
   (:default-initargs
@@ -96,7 +100,7 @@
                 :email email
                 :password (cl-pass:hash plaintext-password
                                         :type :pbkdf2-sha256
-                                        :iterations 200000)
+                                        :iterations 30000)
                 :adminp adminp
                 :token (uuid:format-as-urn nil (uuid:make-v4-uuid))))
 
@@ -135,7 +139,8 @@
    (user :reader change-user
          :initarg :user
          :type int
-         :foreign (user)
+         :nullp t
+         :foreign (user :on-delete :set-null :on-update :cascade)
          :documentation "A foreign key to the user who made this change.")
    (message :reader change-message
             :initarg :message
@@ -231,15 +236,27 @@
   "On startup, create the session object, hook everything up, and start the
 connection."
   (let ((session (crane:make-session :migratep nil
-                                     :defaultp t)))
-    (crane:define-sqlite3-database antimer-db
-      :name (namestring
-             (merge-pathnames #p"db.sqlite3"
-                              (data-directory plugin))))
-    (crane:register-database session 'antimer-db)
-    (crane:register-table session 'user 'antimer-db)
-    (crane:register-table session 'article 'antimer-db)
-    (crane:register-table session 'change 'antimer-db)
+                                     :defaultp t))
+        (tag (gensym)))
+    (crane.config:add-database
+     tag
+     (if (slot-boundp plugin 'url)
+         ;; The user has provided a custom URL. In case it's an SQLite3 relative
+         ;; path, set the *default-pathname-defaults* to the wiki directory
+         (let ((*default-pathname-defaults*
+                (antimer.wiki:wiki-directory
+                 antimer.wiki:*wiki*)))
+           (crane.url:parse (plugin-url plugin)))
+         ;; By default, use an SQLite3 database in the data directory
+         (make-instance 'crane.database.sqlite3:sqlite3
+                        :name
+                        (namestring
+                         (merge-pathnames #p"db.sqlite3"
+                                          (data-directory plugin))))))
+    (crane:register-database session tag)
+    (crane:register-table session 'user tag)
+    (crane:register-table session 'article tag)
+    (crane:register-table session 'change tag)
     (crane:start session)
     (setf (plugin-session plugin) session)))
 
