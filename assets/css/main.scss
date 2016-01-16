@@ -10,20 +10,41 @@ $pt-sans: 'PT Sans', sans-serif;
 
 /* Reset */
 
-*, *:after, *:before {
-  margin: 0;
-  padding: 0;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+*,
+*:after,
+*:before {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html {
-  height: 100vh;
+    height: 100vh;
 }
 
 body {
     color: #333;
+    font-family: $pt-sans;
+}
+
+body > nav {
+    height: 40px;
+    line-height: 40px;
+    background: #f9f9f9;
+
+    @include flexbox();
+    @include flex-direction(row);
+    @include justify-content(space-around);
+
+    button {
+        background: transparent;
+        border: 1px solid #999;
+        border-radius: 4px;
+        padding: 5px;
+        cursor: pointer;
+    }
 }
 
 main.article {
