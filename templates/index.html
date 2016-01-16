@@ -1,14 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Welcome to Antimer!</h1>
-  {% if user %}
-    <a href="/user/{{ user }}">{{ user }}</a>
-    <a href="/logout">Log out</a>
-  {% else %}
-    <a href="/register">Register</a>
-    <a href="/login">Sign in</a>
-  {% endif %}
   <a href="/article/new">Create Article</a>
   <a href="/article/all">All Articles</a>
 {% endblock %}
