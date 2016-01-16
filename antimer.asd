@@ -21,6 +21,8 @@
                :command-line-arguments
                ;; Search
                :searchspace
+               ;; Configuration
+               :cl-yaml
                ;; Utilities
                :uiop
                :alexandria
@@ -41,13 +43,17 @@
                 :serial t
                 :components
                 ((:file "event")
+                 (:file "config")
                  (:file "wiki")
                  (:file "plugin")
                  (:file "diff")
                  (:file "doc")
-                 (:file "db")
+                 (:module "core"
+                  :serial t
+                  :components
+                  ((:file "db")
+                   (:file "web")))
                  (:file "wiki-methods")
-                 (:file "app")
                  (:file "cli"))))
   :description "A wiki."
   :long-description
