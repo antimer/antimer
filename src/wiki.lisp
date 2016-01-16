@@ -6,7 +6,8 @@
            :wiki-directory
            :start
            :stop
-           :apply-events)
+           :apply-events
+           :wiki-config-pathname)
   (:documentation "The wiki object."))
 (in-package :antimer.wiki)
 
@@ -17,10 +18,10 @@
               :initarg :directory
               :type pathname
               :documentation "The absolute pathname to the wiki directory.")
-   (plugins :reader wiki-plugins
-            :initarg :plugins
-            :type list
-            :documentation "A list of plugin instances."))
+   (config :reader wiki-config
+           :initarg :config
+           :type antimer.config:config
+           :documentation "The wiki configuration."))
   (:documentation "A wiki."))
 
 (defgeneric start (wiki)
@@ -32,3 +33,6 @@
 (defgeneric apply-events (wiki event)
   (:documentation "Go through every plugin in the wiki, sending an event to
   it."))
+
+(defgeneric wiki-config-pathname (wiki)
+  (:documentation "Return the path to the config file."))
