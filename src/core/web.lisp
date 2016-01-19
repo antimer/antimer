@@ -120,12 +120,15 @@
                         :error message)))
     (let ((article (antimer.db:find-article slug)))
       (if article
-          (render-view +view-article+
-                       :title (antimer.db:article-title article)
-                       :slug slug
-                       :html (antimer.doc:render-document
-                              (antimer.doc:parse-document
-                               (antimer.db:article-source article))))
+          (let* ((doc (antimer.doc:parse-document
+                       (antimer.db:article-source article)))
+                 (word-count (antimer.doc:word-count doc)))
+            (render-view +view-article+
+                         :title (antimer.db:article-title article)
+                         :slug slug
+                         :html (antimer.doc:render-document doc)
+                         :word-count word-count
+                         :read-time (antimer.doc:time-to-read word-count)))
           (render-error "No such article.")))))
 
 @route app (:get "/article/:slug/edit")
@@ -179,6 +182,8 @@
   (let ((article (antimer.db:find-article slug)))
     (if article
         (render-view +article-changes+
+                     :title (antimer.db:article-title article)
+                     :slug slug
                      :changes
                      (let ((changes (list)))
                        (antimer.db:do-changes (change article)
@@ -186,7 +191,6 @@
                        changes))
         (render-view +error+
                      :message "No such article."))))
-
 
 ;;; Authentication views
 
