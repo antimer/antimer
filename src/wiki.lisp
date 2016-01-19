@@ -3,7 +3,9 @@
   (:use :cl)
   (:export :*wiki*
            :wiki
+           :wiki-name
            :wiki-directory
+           :wiki-config
            :start
            :stop
            :apply-events
@@ -14,7 +16,12 @@
 (defvar *wiki*)
 
 (defclass wiki ()
-  ((directory :reader wiki-directory
+  ((name :reader wiki-name
+         :initarg :name
+         :initform "Antimer Wiki"
+         :type string
+         :documentation "The name of the wiki.")
+   (directory :reader wiki-directory
               :initarg :directory
               :type pathname
               :documentation "The absolute pathname to the wiki directory.")
@@ -35,4 +42,14 @@
   it."))
 
 (defgeneric wiki-config-pathname (wiki)
-  (:documentation "Return the path to the config file."))
+  (:documentation "Return the path to the config file.")
+
+  (:method ((wiki wiki))
+    (merge-pathnames #p"config.yaml" (wiki-directory wiki))))
+
+(defgeneric wiki-static-directory (wiki)
+  (:documentation "Return the absolute pathname to the wiki's static files
+  directory.")
+
+  (:method ((wiki wiki))
+    (merge-pathnames #p"static/" (wiki-directory wiki))))

@@ -23,6 +23,3 @@
   (when (slot-boundp plugin 'antimer.plugin::directory-name)
     (ensure-directories-exist
      (antimer.plugin:data-directory plugin))))
-
-(defmethod wiki-config-pathname ((wiki wiki))
-  (merge-pathnames #p"config.yaml" (wiki-directory wiki)))
