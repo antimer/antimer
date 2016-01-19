@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block title %}
+  {{ wiki-name }}
+{% endblock %}
+
 {% block content %}
   <a href="/article/new">Create Article</a>
   <a href="/article/all">All Articles</a>
