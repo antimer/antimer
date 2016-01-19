@@ -157,13 +157,16 @@
               :documentation "The time when the change was made."))
   (:documentation "A change in an article."))
 
+(defun clean-source (string)
+  (remove #\Return string))
+
 (defun create-article (title slug source user
                        &optional (message "Created article"))
   "Create an article in the database."
   (let ((article (crane:create 'article
                                :title title
                                :slug slug
-                               :source source)))
+                               :source (clean-source source))))
     (crane:create 'change
                   :article (crane:id article)
                   :user (crane:id user)
@@ -172,18 +175,21 @@
                   :timestamp (local-time:now))
     article))
 
-(defun edit-article (article new-source message user)
-  "Edit an article. Return the change object."
-  (let ((diff (antimer.diff:diff (article-source article)
-                                 new-source)))
-    (setf (article-source article) new-source)
-    (crane:save article)
-    (crane:create 'change
-                  :article (crane:id article)
-                  :user (crane:id user)
-                  :message message
-                  :diff diff
-                  :timestamp (local-time:now))))
+(defun edit-article (article source message user)
+  "Edit an article, returning the change object. If the source has not changed,
+do nothing and return NIL."
+  (let ((source (clean-source source)))
+    (unless (string= (article-source article) source)
+      (let ((diff (antimer.diff:diff (article-source article)
+                                     source)))
+        (setf (article-source article) source)
+        (crane:save article)
+        (crane:create 'change
+                      :article (crane:id article)
+                      :user (crane:id user)
+                      :message message
+                      :diff diff
+                      :timestamp (local-time:now))))))
 
 (defun find-article (slug)
   (crane:single 'article `(:where (:= :slug ,slug))))
@@ -235,31 +241,31 @@
 (defmethod on-event ((plugin database) (event startup))
   "On startup, create the session object, hook everything up, and start the
 connection."
-  (let ((session (crane:make-session :migratep nil
-                                     :defaultp t))
-        (tag (gensym)))
-    (crane.config:add-database
-     tag
-     (if (slot-boundp plugin 'url)
-         ;; The user has provided a custom URL. In case it's an SQLite3 relative
-         ;; path, set the *default-pathname-defaults* to the wiki directory
-         (let ((*default-pathname-defaults*
-                (antimer.wiki:wiki-directory
-                 antimer.wiki:*wiki*)))
-           (crane.url:parse (plugin-url plugin)))
-         ;; By default, use an SQLite3 database in the data directory
-         (make-instance 'crane.database.sqlite3:sqlite3
-                        :name
-                        (namestring
-                         (merge-pathnames #p"db.sqlite3"
-                                          (data-directory plugin))))))
-    (crane:register-database session tag)
-    (crane:register-table session 'user tag)
-    (crane:register-table session 'article tag)
-    (crane:register-table session 'change tag)
+  (let ((session (crane:make-session :migratep nil))
+        (db (if (slot-boundp plugin 'url)
+                ;; The user has provided a custom URL. In case it's an SQLite3
+                ;; relative path, set the *default-pathname-defaults* to the
+                ;; wiki directory
+                (let ((*default-pathname-defaults*
+                       (antimer.wiki:wiki-directory
+                        antimer.wiki:*wiki*)))
+                  (crane.url:parse (plugin-url plugin)))
+                ;; By default, use an SQLite3 database in the data directory
+                (make-instance 'crane.database.sqlite3:sqlite3
+                               :name
+                               (namestring
+                                (merge-pathnames #p"db.sqlite3"
+                                                 (data-directory plugin)))))))
+    (crane:register-table session 'user db)
+    (crane:register-table session 'article db)
+    (crane:register-table session 'change db)
+    (antimer.log:info :db "Starting database connections")
     (crane:start session)
+    (setf crane:*session* session)
     (setf (plugin-session plugin) session)))
 
 (defmethod on-event ((plugin database) (event shutdown))
   "On shutdown, cut the connections."
-  (crane:stop (plugin-session plugin)))
+  (antimer.log:info :db "Closing database connections")
+  (crane:stop (plugin-session plugin))
+  (makunbound 'crane:*session*))
