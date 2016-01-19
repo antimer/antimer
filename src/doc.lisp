@@ -54,4 +54,4 @@ If an error occurs, signal transformation-error."
         (*document-section-format-control* "~A#~A"))
     (common-html.template:with-template ('antimer-template)
       (common-doc.format:emit-to-string (make-instance 'common-html:html)
-                                        document))))
+                                        (transform-document document)))))
