@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <main class="article changes">
+    <ul>
+      {% for change in changes %}
+        <li>
+          Message:
+          <p class="message">
+            {{ change.message }}
+          </p>
+        </li>
+      {% endfor %}
+    </ul>
+  </main>
+{% endblock %}
