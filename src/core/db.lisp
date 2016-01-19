@@ -236,6 +236,15 @@ do nothing and return NIL."
                       ,results-per-page
                       ,from))
 
+(deftable file ()
+  ((name :reader filename
+         :initarg :name
+         :type text
+         :uniquep t
+         :indexp t
+         :documentation "The full name of the file, including the extension."))
+  (:documentation "A reference to a file."))
+
 ;;; Events
 
 (defmethod on-event ((plugin database) (event startup))
