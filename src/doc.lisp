@@ -14,13 +14,22 @@
 
 (defun word-count (document)
   "Return the number of words in a document."
-  (declare (ignore document))
-  10)
+  (length
+   (remove-if #'uiop:emptyp
+              (mapcar #'(lambda (line)
+                          (string-trim (list #\Space #\Newline)
+                                       line))
+                      (ppcre:split "[^\\w]+"
+                                   (common-doc.ops:collect-all-text
+                                    document))))))
 
-(defun time-to-read (document)
-  "Return the time it takes to read a document in seconds."
-  (let ((wpm 200)) ;; sure why not
-    (* (word-count document) (/ wpm 60))))
+(defun time-to-read (word-count)
+  "Return the time it takes to read a document in minutes."
+  (let* ((wpm 200) ;; sure why not
+         (result (round (/ word-count wpm))))
+    (if (zerop result)
+        1
+        result)))
 
 (defun parse-document (source)
   "Parse a document from its source tree. Returns the document."
