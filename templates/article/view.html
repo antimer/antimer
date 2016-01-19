@@ -2,7 +2,15 @@
 
 {% block content %}
   <main class="article list">
-    <h1>{{ title }}</h1>
+    <header>
+      <h1>{{ title }}</h1>
+      <div class="actions">
+        {% if user %}
+          <a href="/article/{{ slug }}/edit">Edit</a>
+        {% endif %}
+        <a href="/article/{{ slug }}/changes">Changes</a>
+      </div>
+    </header>
     <article>
       {{ html | safe }}
     </article>
