@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="article edit">
+  {% if error %}
+    <div class="error">
+      {{ error }}
+    </div>
+  {% endif %}
+  <form action="/article/{{ slug }}/edit" method="post">
+    <textarea name="source">{{ source }}</textarea>
+    <input type="text" name="message" placeholder="Describe your changes">
+    <input type="submit">
+  </form>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.6/zepto.min.js"></script>
+<script>
+ function slugify(text) {
+     return text.toString().toLowerCase()
+                .replace(/\s+/g, '-')
+                .replace(/[^\w\-]+/g, '')
+                .replace(/\-\-+/g, '-')
+                .replace(/^-+/, '')
+                .replace(/-+$/, '');
+ }
+
+ Zepto(function($) {
+     $('#title').on('keyup', function() {
+         const title = this.value;
+         $('#slug').val(slugify(title));
+     });
+ })
+</script>
+{% endblock %}
