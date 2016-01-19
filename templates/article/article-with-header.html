@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <main class="article{% block article-class %}{% endblock %}">
+    <header>
+      <h1>{{ title }}</h1>
+      <div class="actions">
+        {% if user %}
+          <a href="/article/{{ slug }}/edit">Edit</a>
+        {% endif %}
+        <a href="/article/{{ slug }}/changes">Changes</a>
+      </div>
+    </header>
+    {% block article-content %}
+    {% endblock %}
+  </main>
+{% endblock %}

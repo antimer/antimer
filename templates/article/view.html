@@ -1,18 +1,50 @@
-{% extends "base.html" %}
+{% extends "article-with-header.html" %}
 
-{% block content %}
-  <main class="article list">
-    <header>
-      <h1>{{ title }}</h1>
-      <div class="actions">
-        {% if user %}
-          <a href="/article/{{ slug }}/edit">Edit</a>
-        {% endif %}
-        <a href="/article/{{ slug }}/changes">Changes</a>
-      </div>
-    </header>
-    <article>
-      {{ html | safe }}
-    </article>
-  </main>
+{% block article-class %} view{% endblock %}
+
+{% block article-content %}
+  <article>
+    {{ html | safe }}
+  </article>
+  <div class="bottom-bar">
+    <ul>
+      <li>
+        <strong>Hide links</strong>
+        <a id="hide-links">off</a>
+      </li>
+      <li>
+        <strong>Font size</strong>
+        <a id="decrease-font-size">-</a>
+        <a id="increase-font-size">+</a>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <strong>Words:</strong> {{ word-count }}
+      </li>
+      <li>
+        <strong>Time to read:</strong> {{ read-time }} min
+      </li>
+    </ul>
+  </div>
+{% endblock %}
+
+{% block last %}
+  <script>
+   Zepto(function($) {
+       $('#hide-links').on('click', function() {
+           const selector = 'article'
+           const state = $(selector).attr('hide-links');
+           if (state) {
+               $(selector).attr('hide-links', null);
+               $(this).attr('hide-links', null);
+               $(this).text('off');
+           } else {
+               $(selector).attr('hide-links', 'true');
+               $(this).attr('hide-links', 'true');
+               $(this).text('on');
+           }
+       });
+   });
+  </script>
 {% endblock %}

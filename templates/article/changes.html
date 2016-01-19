@@ -1,16 +1,16 @@
-{% extends "base.html" %}
+{% extends "article-with-header.html" %}
 
-{% block content %}
-  <main class="article changes">
-    <ul>
-      {% for change in changes %}
-        <li>
-          Message:
-          <p class="message">
-            {{ change.message }}
-          </p>
-        </li>
-      {% endfor %}
-    </ul>
-  </main>
+{% block article-class %} changes{% endblock %}
+
+{% block article-content %}
+  <ul>
+    {% for change in changes %}
+      <li>
+        Message:
+        <p class="message">
+          {{ change.message }}
+        </p>
+      </li>
+    {% endfor %}
+  </ul>
 {% endblock %}
