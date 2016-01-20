@@ -9,6 +9,9 @@
   :depends-on (;; Documents
                :common-doc
                :pandocl
+               :thorn
+               :common-doc-tex
+               :common-doc-gnuplot
                ;; Database
                :crane
                :cl-pass
@@ -23,36 +26,47 @@
                :searchspace
                ;; Configuration
                :cl-yaml
+               ;; Assets
+               :lass
+               :lass-flexbox
                ;; Utilities
                :uiop
                :alexandria
                :difflib
                :split-sequence
                :yason
-               :uuid)
-  :defsystem-depends-on (:asdf-linguist)
+               :uuid
+               :trivial-download
+               :trivial-extract)
   :build-operation program-op
   :build-pathname "antimer"
   :entry-point "antimer.cli:main"
-  :components ((:module "assets"
-                :components
-                ((:module "css"
-                  :components
-                  ((:sass "main")))))
-               (:module "src"
+  :components ((:module "src"
                 :serial t
                 :components
                 ((:file "event")
                  (:file "config")
                  (:file "wiki")
                  (:file "plugin")
+                 (:file "log")
+                 (:file "static")
                  (:file "diff")
                  (:file "doc")
                  (:module "core"
                   :serial t
                   :components
                   ((:file "db")
-                   (:file "web")))
+                   (:file "web")
+                   (:file "file")
+                   (:file "mathjax")))
+                 (:module "theme"
+                  :serial t
+                  :components
+                  ((:module "default"
+                    :serial t
+                    :components
+                    ((:static-file "style.lass")
+                     (:file "theme")))))
                  (:file "wiki-methods")
                  (:file "cli"))))
   :description "A wiki."

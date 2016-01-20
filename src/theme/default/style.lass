@@ -1,0 +1,297 @@
+(:let ((pt-sans "'PT Sans', sans-serif")
+       (article-heading-font "'Crimson Text', 'Palatino Linotype', serif")
+       (article-text-font "'PT Serif', 'Palatino Linotype', serif")
+       (article-base-font-size "20px")
+       (article-header-height "300px")
+       (bottom-bar-font "'Source Sans Pro', 'Helvetica Neue', sans-serif")
+       (heading-text-color "#222")
+       (body-text-color "#444")
+       (input-group-height "60px"))
+
+  (:import "url('https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic')")
+
+  (:import "url('https://fonts.googleapis.com/css?family=Crimson+Text:400,400italic,600,600italic,700,700italic')")
+
+  (:import "url('https://fonts.googleapis.com/css?family=Lusitana:400,700')")
+
+  (:import "url('https://fonts.googleapis.com/css?family=Cardo:400,400italic,700')")
+
+  (:import "url('https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic')")
+
+  (:import "url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,200italic,300,300italic,400italic,600italic,600,700,700italic,900,900italic')")
+
+  ((:or * (:after *) (:before *))
+   :margin 0
+   :padding 0
+   :-webkit-box-sizing "border-box"
+   :-moz-box-sizing "border-box"
+   :box-sizing "border-box")
+
+  (html
+   :min-height 100vh)
+
+  (body
+   :color #(body-text-color)
+   :font-family #(pt-sans))
+
+  ((body > nav)
+   :height "40px"
+   :line-height "40px"
+   :background "#f9f9f9"
+
+   :flexbox
+   :flex-direction "row"
+   :justify-content "space-around"
+
+   (.user
+    (a
+     :border "1px solid #999"
+     :border-radius "4px"
+     :padding "5px"
+     :cursor "pointer"
+     :text-decoration none
+     :margin-left 5px
+     :text-align center)))
+
+  ;;;; Articles
+
+  ((:or main.article.new main.article.edit)
+   :width "60%"
+   :margin "0 auto"
+
+   (form
+    :flexbox
+    :flex-direction "column"
+
+    ((:= name title)
+     :font-size "36px"
+     :margin-bottom 30px)
+
+    ((:= name slug)
+     :margin-bottom 20px)
+
+    (textarea
+     :min-height "300px")))
+
+  (main.article.changes
+   (ul
+    :width 60%
+    :margin 0 auto
+
+    (li
+     :list-style-type none)))
+
+  (main.article
+   :font-size #(article-base-font-size)
+
+   (header
+    :height #(article-header-height)
+    :text-align center
+    :position relative
+
+    :border-bottom "1px solid #ccc"
+
+    (h1
+     :font-family #(article-heading-font)
+     :font-size 4em
+     :line-height #(article-header-height))
+
+    (.actions
+     :position absolute
+     :bottom 4px
+     :left 70px
+
+     (a
+      :text-decoration none
+      :color "#333")
+
+     ((:and a ":not(:last-child)")
+      :margin-right "25px")))
+
+   (article
+    :font-family #(article-text-font)
+    :text-align justify
+    :text-justify inter-word
+
+    :width 65%
+    :margin "100px auto"
+
+    ;;; Font sizes
+
+    (h1
+     :font-size 3em)
+
+    (h2
+     :font-size 2.25em)
+
+    (h3
+     :font-size 1.75em)
+
+    (h4
+     :font-size 1.125em)
+
+    ;;; Space between elements
+
+    ((:or p ul ol dl table image figure blockquote)
+     :margin-bottom 20px)
+
+    ((:or h1 h2 h3 h4 h5 h6)
+     :margin-top 1em
+     :margin-bottom 1em)
+
+    (h1
+     :border-bottom "1px solid #ccc")
+
+    (h2
+     :border-bottom "1px solid #ccc")
+
+    ;;; Heading Style
+
+    ((:or h1 h2 h3 h4 h5 h6)
+     :color #(heading-text-color)
+     :font-family #(article-heading-font))
+
+    ;;; List Style
+
+    ((:or ul ol)
+     :padding-left 25px)
+
+    (dl
+     (dt
+      :font-weight bold
+      :padding-left 25px
+      :margin-bottom 10px)
+
+     (dd
+      :padding-left 45px)
+
+     ((:and dd ":not(:last-child)")
+      :margin-bottom 20px))
+
+    (blockquote
+     :width 60%
+     :margin-left auto
+     :margin-right auto)
+
+    (table
+     :border-collapse collapse
+
+     (td
+      :padding 15px)))
+
+   ((:and article (:= hide-links true))
+    (a
+     :color #(body-text-color)
+     :text-decoration none))
+
+   (.bottom-bar
+    :position fixed
+    :bottom 0
+    :width 100%
+    :height 30px
+    :line-height 30px
+    :border-top 1px solid "#d8d8d8"
+
+    :flexbox
+    :flex-direction "row"
+    :justify-content "space-between"
+
+    :background white
+
+    :font-family #(bottom-bar-font)
+    :font-size 13px
+    :text-transform uppercase
+    :color "#828282"
+
+    :-webkit-touch-callout none
+    :-webkit-user-select none
+    :-khtml-user-select none
+    :-moz-user-select none
+    :-ms-user-select none
+    :user-select none
+
+    (ul
+     :flexbox
+     :flex-direction "row"
+
+     (li
+      :list-style-type none
+      :padding 0 10px
+
+      (strong
+       :font-weight 600
+       :color black)
+
+      (a
+       :padding 0 8px
+       :cursor pointer)
+
+      ((:and a (:= hide-links true))
+       :color "#299ed3")
+
+      ("#hide-links"
+       ;; Ensure changing the text of this button doesn't change its width
+       :display inline-block
+       :width 38px
+       :text-align center)))))
+
+  ;;;; Authentication
+
+  (main.auth
+   :flexbox
+   :flex-direction "column"
+   :justify-content "center"
+   :align-items "center"
+
+   :height 100vh
+
+   (h1
+    :font-family #(pt-sans)
+    :font-size 36px
+    :margin-bottom 30px)
+
+   (form
+    :width 40%
+
+    :border "1px solid #ddd"
+    :border-radius 10px
+
+    :flexbox
+    :flex-direction "column"
+
+    (input
+     :border none)
+
+    (.input-group
+     :flexbox
+     :flex-direction "column"
+
+     :height #(input-group-height)
+
+     ((:or label input)
+      :height 20px)
+
+     (label
+      :text-transform uppercase
+      :font-weight bold
+      :line-height 20px
+      :padding-left 10px
+
+      :font-family #(pt-sans)
+      :font-size 14px
+      :color "#999")
+
+     (input
+      :padding "0 10px"
+      :outline "none")
+
+     ((:and input ":-webkit-autofill")
+      :background "white !important"))
+
+    ((:and .input-group ":not(:last-child)")
+     :border-bottom "1px solid #ccc")
+
+    ((:and input (:= type submit))
+     :background :transparent
+     :padding "10px 8px"
+     :cursor pointer))))
