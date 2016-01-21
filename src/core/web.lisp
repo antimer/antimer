@@ -203,12 +203,17 @@
       (render-view +error+
                    :message "You must be logged in to upload a file.")))
 
+(defun stream->string (stream)
+  (trivial-utf-8:utf-8-bytes-to-string
+   (coerce (loop for c = (read-byte stream nil nil) while c collecting c)
+           'vector)))
+
 (defmacro with-file-param ((name filename stream &key (on-error '(respond "")))
                            &body body)
-  `(with-params (,name)
+  `(with-params (,name ,filename)
      (if ,name
-         (let ((,filename (gethash "name" (second ,name)))
-               (,stream (first ,name)))
+         (let ((,stream (first ,name))
+               (,filename (stream->string (first ,filename))))
            ,@body)
          ,on-error)))
 
