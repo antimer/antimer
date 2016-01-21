@@ -5,6 +5,7 @@
                 :*wiki*
                 :wiki-static-directory)
   (:export :static-pathname
+           :existsp
            :copy-file
            :copy-directory)
   (:documentation "Tools for static files."))
@@ -12,6 +13,9 @@
 
 (defun static-pathname (pathname)
   (merge-pathnames pathname (wiki-static-directory *wiki*)))
+
+(defun existsp (pathname)
+  (and (probe-file (static-pathname pathname)) t))
 
 (defun copy-file (source destination)
   "Copy a file from @cl:param(source), an absolute pathname to any file, to
