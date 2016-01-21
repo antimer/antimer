@@ -42,7 +42,10 @@
            :article-count
            :do-articles
            :random-article
-           :do-changes)
+           :do-changes
+           :file
+           :filename
+           :create-file)
   (:documentation "Antimer's relational database interface."))
 (in-package :antimer.db)
 
@@ -244,6 +247,11 @@ do nothing and return NIL."
          :indexp t
          :documentation "The full name of the file, including the extension."))
   (:documentation "A reference to a file."))
+
+(defun create-file (filename)
+  "Create a file in the database, returning the instance."
+  (crane:create 'file
+                :filename filename))
 
 ;;; Events
 
