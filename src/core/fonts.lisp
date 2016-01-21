@@ -12,7 +12,7 @@
                 :shutdown)
   (:export :fonts)
   (:documentation "A plugin to download fonts."))
-(in-package :antimer.mathjax)
+(in-package :antimer.fonts)
 
 ;;; Plugin definition
 
