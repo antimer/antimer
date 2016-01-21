@@ -1,0 +1,64 @@
+{% extends "../tools-base.html" %}
+
+{% block tools-class %} tex{% endblock %}
+
+{% block tools-content %}
+  {% if user %}
+    <h2>Add a Macro</h2>
+    <form method="post" action="/tools/tex">
+      <input name="name" type="text" placeholder="Name">
+      <input name="definition" type="text" placeholder="Definition">
+      <input type="submit">
+    </form>
+  {% endif %}
+  <h2>Macro List</h2>
+  <ul>
+    {% for macro in macros %}
+      <li>
+        <div class="header">
+          <h3>{{ macro.name }}</h3>
+          <div class="actions">
+            {% if user %}
+              <button class="save" data-name="{{ macro.name }}">Save</button>
+              <button class="delete" data-name="{{ macro.name }}">Delete</button>
+            {% endif %}
+          </div>
+        </div>
+        <pre><textarea data-name="{{ macro.name }}">{{ macro.definition }}</textarea></pre>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+
+{% block last %}
+  <script>
+   Zepto(function($) {
+       $('.save').on('click', function() {
+           const macro_name = $(this).attr('data-name');
+           const definition = $('textarea[data-name="' + macro_name + '"]').val();
+           const url = '/tools/tex/' + macro_name;
+           if (macro_name && definition) {
+               $.post(url,
+                      'definition=' + encodeURIComponent(definition),
+                      function(response) {
+                          console.log(response);
+                      }
+               );
+           };
+       });
+
+       $('.delete').on('click', function() {
+           const macro_name = $(this).attr('data-name');
+           if (macro_name) {
+               $.ajax({
+                   url: '/tools/tex/' + macro_name,
+                   type: 'DELETE',
+                   success: function(r) {
+                       console.log(r);
+                   }
+               });
+           };
+       });
+   });
+  </script>
+{% endblock %}

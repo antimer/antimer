@@ -37,7 +37,8 @@
                :yason
                :uuid
                :trivial-download
-               :trivial-extract)
+               :trivial-extract
+               :cl-ppcre)
   :build-operation program-op
   :build-pathname "antimer"
   :entry-point "antimer.cli:main"
@@ -69,6 +70,7 @@
                     ((:static-file "style.lass")
                      (:file "theme")))))
                  (:file "wiki-methods")
+                 (:file "macros")
                  (:file "cli"))))
   :description "A wiki."
   :long-description

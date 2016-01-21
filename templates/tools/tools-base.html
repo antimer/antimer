@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <main class="tools{% block tools-class %}{% endblock %}">
+    <aside>
+      <ul>
+        <li>
+          <a href="/tools">Tools</a>
+        </li>
+        {% for (title . slug) in tools %}
+          <li>
+            <a href="/tools/{{ slug }}">{{ title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </aside>
+    <main>
+      <header>
+        <h1>{{ title }}</h1>
+      </header>
+      <div class="content">
+        {% block tools-content %}
+        {% endblock %}
+      </div>
+    </main>
+  </main>
+{% endblock %}

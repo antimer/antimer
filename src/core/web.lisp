@@ -14,7 +14,10 @@
   (:import-from :antimer.event
                 :startup
                 :shutdown)
-  (:export :web-app)
+  (:export :app
+           :web-app
+           :register-tool
+           :render-tool-template)
   (:documentation "The web application."))
 (in-package :antimer.web)
 (annot:enable-annot-syntax)
@@ -52,6 +55,7 @@
 (defparameter +edit-article+ (djula:compile-template* "article/edit.html"))
 (defparameter +article-changes+ (djula:compile-template* "article/changes.html"))
 (defparameter +new-file+ (djula:compile-template* "file/new.html"))
+(defparameter +tools-index+ (djula:compile-template* "tools/index.html"))
 
 ;;; Views
 
@@ -263,6 +267,23 @@
         (serve-file (antimer.file:file-path filename))
         (render-view +error+
                      :message "No such file."))))
+
+;;; Tools
+
+(defvar *tools* (make-hash-table :test #'equal))
+
+(defun register-tool (title slug)
+  (setf (gethash title *tools*) slug))
+
+(defmacro render-tool-template ((view) &rest params)
+  `(render-view ,view
+                :tools *tools*
+                ,@params))
+
+@route app "/tools"
+(defview tools ()
+  (render-tool-template (+tools-index+)
+                        :title "Tools"))
 
 ;;; Authentication views
 

@@ -210,7 +210,7 @@ do nothing and return NIL."
 
 (defun call-with-articles (function results-per-page from)
   (mapc function (crane:filter 'article
-                               `(:order-by (:asc :title))
+                               `(:order-by (:desc :title))
                                `(:limit ,results-per-page)
                                `(:offset ,from))))
 
