@@ -45,7 +45,8 @@
            :do-changes
            :file
            :filename
-           :create-file)
+           :create-file
+           :find-file)
   (:documentation "Antimer's relational database interface."))
 (in-package :antimer.db)
 
@@ -251,7 +252,10 @@ do nothing and return NIL."
 (defun create-file (filename)
   "Create a file in the database, returning the instance."
   (crane:create 'file
-                :filename filename))
+                :name filename))
+
+(defun find-file (filename)
+  (crane:single 'file `(:where (:= :name ,filename))))
 
 ;;; Events
 
@@ -276,6 +280,7 @@ connection."
     (crane:register-table session 'user db)
     (crane:register-table session 'article db)
     (crane:register-table session 'change db)
+    (crane:register-table session 'file db)
     (antimer.log:info :db "Starting database connections")
     (crane:start session)
     (setf crane:*session* session)
