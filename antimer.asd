@@ -58,7 +58,8 @@
                   ((:file "db")
                    (:file "file")
                    (:file "web")
-                   (:file "mathjax")))
+                   (:file "mathjax")
+                   (:file "fonts")))
                  (:module "theme"
                   :serial t
                   :components
