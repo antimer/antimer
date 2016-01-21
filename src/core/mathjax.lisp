@@ -47,4 +47,8 @@
       (trivial-extract:extract-zip archive)
       ;; Copy the directory
       (antimer.log:info :mathjax "Copying MathJax files")
-      (antimer.static:copy-directory dir #p"mathjax/"))))
+      (antimer.static:copy-directory dir #p"mathjax/")
+      ;; Delete everything
+      (antimer.log:info :mathjax "Deleting downloads")
+      (delete-file archive)
+      (uiop:delete-directory-tree dir :validate t))))
