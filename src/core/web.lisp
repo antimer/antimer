@@ -229,10 +229,35 @@
       (with-file-param (file filename stream)
         (let ((local-path (antimer.file:file-path filename)))
           (antimer.log:info :web "Storing file ~S in ~S" filename (namestring local-path))
+          (antimer.db:create-file filename)
           (download-uploaded-file stream local-path))
         (respond "Uploaded successfully"))
       (render-view +error+
                    :message "You must be logged in to upload a file.")))
+
+(defun serve-file (pathname)
+  (let* ((content-type (or (trivial-mimes:mime-lookup pathname)
+                           "text/plain"))
+         (univ-time (or (file-write-date pathname)
+                        (get-universal-time)))
+         (stamp (local-time:universal-to-timestamp univ-time)))
+    (with-open-file (stream pathname
+                            :direction :input
+                            :if-does-not-exist nil)
+      `(200
+        (:content-type ,content-type
+         :content-length ,(file-length stream)
+         :last-modified
+         ,(local-time:format-rfc1123-timestring nil stamp))
+        ,pathname))))
+
+@route app (:get "/file/:filename/data")
+(defview file-data (filename)
+  (let ((file (antimer.db:find-file filename)))
+    (if file
+        (serve-file (antimer.file:file-path filename))
+        (render-view +error+
+                     :message "No such file."))))
 
 ;;; Authentication views
 
