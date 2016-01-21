@@ -1,11 +1,11 @@
 (:let ((pt-sans "'PT Sans', sans-serif")
        (article-heading-font "'Crimson Text', 'Palatino Linotype', serif")
        (article-text-font "'et-book', 'Palatino Linotype', serif")
-       (article-base-font-size "20px")
+       (article-base-font-size "22px")
        (article-header-height "300px")
        (bottom-bar-font "'Source Sans Pro', 'Helvetica Neue', sans-serif")
        (heading-text-color "#222")
-       (body-text-color "#444")
+       (body-text-color "#333")
        (input-group-height "60px"))
 
   (:import "url('https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic')")
