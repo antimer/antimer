@@ -1,6 +1,6 @@
 (:let ((pt-sans "'PT Sans', sans-serif")
        (article-heading-font "'Crimson Text', 'Palatino Linotype', serif")
-       (article-text-font "'PT Serif', 'Palatino Linotype', serif")
+       (article-text-font "'et-book', 'Palatino Linotype', serif")
        (article-base-font-size "20px")
        (article-header-height "300px")
        (bottom-bar-font "'Source Sans Pro', 'Helvetica Neue', sans-serif")
@@ -19,6 +19,27 @@
   (:import "url('https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic')")
 
   (:import "url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,200italic,300,300italic,400italic,600italic,600,700,700italic,900,900italic')")
+
+  (:font-face
+   :font-family "'et-book'"
+   :src (:url "/static/fonts/et-book/et-bembo-roman-line-figures.ttf")
+   "format('truetype')"
+   :font-weight normal
+   :font-style normal)
+
+  (:font-face
+   :font-family "'et-book'"
+   :src (:url "/static/fonts/et-book/et-bembo-display-italic-old-style-figures.ttf")
+   "format('truetype')"
+   :font-weight normal
+   :font-style italic)
+
+  (:font-face
+   :font-family "'et-book'"
+   :src (:url "/static/fonts/et-book/et-bembo-bold-line-figures.ttf")
+   "format('truetype')"
+   :font-weight bold
+   :font-style normal)
 
   ((:or * (:after *) (:before *))
    :margin 0
