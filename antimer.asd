@@ -56,8 +56,8 @@
                   :serial t
                   :components
                   ((:file "db")
-                   (:file "web")
                    (:file "file")
+                   (:file "web")
                    (:file "mathjax")))
                  (:module "theme"
                   :serial t
