@@ -39,7 +39,8 @@
         (*read-eval* nil))
     (make-instance 'config
                    :plugins
-                   (parse-plugins (gethash "plugins" data)))))
+                   (reverse
+                    (parse-plugins (gethash "plugins" data))))))
 
 (defun parse-plugins (plugins)
   (let ((parsed (mapcar #'parse-plugin plugins)))
