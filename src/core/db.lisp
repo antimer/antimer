@@ -18,6 +18,7 @@
                 :bool
                 :timestamp)
   (:export :database
+           :register-table
            :user
            :user-username
            :user-email
@@ -69,6 +70,12 @@
 
 (defmethod short-description ((plugin database))
   "The database plugin provides an SQL database for storing Antimer's data.")
+
+(defvar *tables* (list))
+
+(defun register-table (table-name)
+  "Register a table that will be created in the database on startup."
+  (pushnew table-name *tables* :test #'eq))
 
 ;;; Tables
 
@@ -259,6 +266,9 @@ do nothing and return NIL."
 
 ;;; Events
 
+(dolist (table '(user article change file))
+  (register-table table))
+
 (defmethod on-event ((plugin database) (event startup))
   "On startup, create the session object, hook everything up, and start the
 connection."
@@ -277,10 +287,8 @@ connection."
                                (namestring
                                 (merge-pathnames #p"db.sqlite3"
                                                  (data-directory plugin)))))))
-    (crane:register-table session 'user db)
-    (crane:register-table session 'article db)
-    (crane:register-table session 'change db)
-    (crane:register-table session 'file db)
+    (dolist (table *tables*)
+      (crane:register-table session table db))
     (antimer.log:info :db "Starting database connections")
     (crane:start session)
     (setf crane:*session* session)
