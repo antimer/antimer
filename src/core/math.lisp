@@ -1,5 +1,5 @@
 (in-package :cl-user)
-(defpackage antimer.mathjax
+(defpackage antimer.math
   (:use :cl)
   (:import-from :antimer.plugin
                 :plugin
@@ -10,32 +10,32 @@
   (:import-from :antimer.event
                 :startup
                 :shutdown)
-  (:export :mathjax)
-  (:documentation "The MathJax plugin."))
-(in-package :antimer.mathjax)
+  (:export :math)
+  (:documentation "The TeX math plugin."))
+(in-package :antimer.math)
 
 ;;; Plugin definition
 
-(defclass mathjax (plugin)
+(defclass math (plugin)
   ()
   (:default-initargs
-   :directory-name "mathjax")
-  (:documentation "The MathJax plugin."))
+   :directory-name "math")
+  (:documentation "The TeX math plugin."))
 
-(defmethod name ((plugin mathjax))
-  "MathJax")
+(defmethod name ((plugin math))
+  "TeX Math")
 
-(defmethod short-description ((plugin mathjax))
+(defmethod short-description ((plugin math))
   "Adds support for rendering math using MathJax.")
 
-(antimer.config:register-default-plugin (make-instance 'mathjax))
+(antimer.config:register-default-plugin (make-instance 'math))
 
 ;;; Events
 
 (defparameter +url+
   "https://github.com/mathjax/MathJax/archive/2.6.0.zip")
 
-(defmethod on-event ((plugin mathjax) (event startup))
+(defmethod on-event ((plugin math) (event startup))
   "On startup, ensure MathJax is downloaded."
   (let ((archive (merge-pathnames #p"mathjax.zip" (data-directory plugin)))
         (dir (merge-pathnames #p"MathJax-2.6.0/" (data-directory plugin)))
