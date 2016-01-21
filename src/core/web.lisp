@@ -268,12 +268,14 @@
 
 @route app (:get "/register")
 (defview get-register ()
-  (render-view +register+))
+  (render-view +register+
+               :title "Register"))
 
 @route app (:post "/register")
 (defview post-register ()
   (flet ((render-error (message)
            (render-template (+register+)
+                            :title "Register"
                             :error message)))
     (with-params (username email password)
       (cond
@@ -294,12 +296,14 @@
 
 @route app (:get "/login")
 (defview get-login ()
-  (render-view +login+))
+  (render-view +login+
+               :title "Sign in"))
 
 @route app (:post "/login")
 (defview post-login ()
   (flet ((render-error (message)
            (render-template (+login+)
+                            :title "Sign in"
                             :error message)))
     (with-params (username password)
       (let ((user (antimer.db:find-user username)))
