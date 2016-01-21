@@ -59,7 +59,7 @@ If an error occurs, signal transformation-error."
 
 (defun render-document (document)
   "Render a CommonDoc document to HTML."
-  (let ((*image-format-control* "/wiki-static/~A")
+  (let ((*image-format-control* "/file/~A/data")
         (*document-section-format-control* "~A#~A"))
     (common-html.template:with-template ('antimer-template)
       (common-doc.format:emit-to-string (make-instance 'common-html:html)
