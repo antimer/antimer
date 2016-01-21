@@ -51,6 +51,7 @@
 (defparameter +view-article+ (djula:compile-template* "article/view.html"))
 (defparameter +edit-article+ (djula:compile-template* "article/edit.html"))
 (defparameter +article-changes+ (djula:compile-template* "article/changes.html"))
+(defparameter +new-file+ (djula:compile-template* "file/new.html"))
 
 ;;; Views
 
@@ -191,6 +192,47 @@
                        changes))
         (render-view +error+
                      :message "No such article."))))
+
+;;; Files
+
+@route app (:get "/file/new")
+(defview get-new-file ()
+  (if (lucerne-auth:logged-in-p)
+      (render-view +new-file+
+                   :title "New File")
+      (render-view +error+
+                   :message "You must be logged in to upload a file.")))
+
+(defmacro with-file-param ((name filename stream &key (on-error '(respond "")))
+                           &body body)
+  `(with-params (,name)
+     (if ,name
+         (let ((,filename (gethash "name" (second ,name)))
+               (,stream (first ,name)))
+           ,@body)
+         ,on-error)))
+
+(defun download-uploaded-file (stream pathname)
+  "Store an uploaded file in the disk."
+  (with-open-file (output pathname
+                          :direction :output
+                          :if-does-not-exist :create
+                          :if-exists :supersede
+                          :element-type '(unsigned-byte 8))
+    (uiop:copy-stream-to-stream stream
+                                output
+                                :element-type '(unsigned-byte 8))))
+
+@route app (:post "/file/new")
+(defview post-new-file ()
+  (if (lucerne-auth:logged-in-p)
+      (with-file-param (file filename stream)
+        (let ((local-path (antimer.file:file-path filename)))
+          (antimer.log:info :web "Storing file ~S in ~S" filename (namestring local-path))
+          (download-uploaded-file stream local-path))
+        (respond "Uploaded successfully"))
+      (render-view +error+
+                   :message "You must be logged in to upload a file.")))
 
 ;;; Authentication views
 
