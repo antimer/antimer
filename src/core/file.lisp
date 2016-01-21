@@ -48,9 +48,10 @@
     (t () nil)))
 
 (defun file-path (filename)
-  (if (file-exists-p filename)
-      (merge-pathnames (parse-namestring filename)
-                       (files-directory))
-      nil))
+  (handler-case
+      (let ((parsed (parse-namestring filename)))
+        (when parsed
+          (merge-pathnames parsed (files-directory))))
+    (t () nil)))
 
 ;;; Events
