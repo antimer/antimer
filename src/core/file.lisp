@@ -14,6 +14,7 @@
                 :startup
                 :shutdown)
   (:export :file-store
+           :files-directory
            :file-exists-p
            :file-path)
   (:documentation "The default file store."))
@@ -55,3 +56,25 @@
     (t () nil)))
 
 ;;; Events
+
+;;; Define
+
+(defun antimer.doc:transform-document (document)
+  "Apply every transformation needed to a document.
+
+If an error occurs, signal transformation-error."
+  (let ((common-doc.file:*base-directory*
+          (antimer.file:files-directory)))
+    (let ((doc (common-doc.macro:expand-macros document)))
+      (setf doc (common-doc.ops:fill-unique-refs doc))
+      doc)))
+
+(defun antimer.doc:render-document (document)
+  "Render a CommonDoc document to HTML."
+  (let ((common-html.emitter:*image-format-control* "/file/~A/data")
+        (common-html.emitter:*document-section-format-control* "~A#~A")
+        (common-doc.file:*base-directory*
+          (antimer.file:files-directory)))
+    (common-html.template:with-template ('antimer.doc:antimer-template)
+      (common-doc.format:emit-to-string (make-instance 'common-html:html)
+                                        document))))
