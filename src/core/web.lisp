@@ -16,8 +16,7 @@
                 :shutdown)
   (:export :app
            :web-app
-           :register-tool
-           :render-tool-template)
+           :register-tool)
   (:documentation "The web application."))
 (in-package :antimer.web)
 (annot:enable-annot-syntax)
@@ -287,14 +286,10 @@
 
 ;;; Tools
 
-(defmacro render-tool-template ((view) &rest params)
-  `(render-template (,view)
-                    ,@params))
-
 @route app "/tools"
 (defview tools ()
-  (render-tool-template (+tools-index+)
-                        :title "Tools"))
+  (render-template (+tools-index+)
+                   :title "Tools"))
 
 ;;; Authentication views
 

@@ -15,13 +15,13 @@
                 :text
                 :int)
   (:import-from :antimer.web
-                :app
-                :render-tool-template)
+                :app)
   (:import-from :lucerne
                 :route
                 :defview
                 :with-params
-                :respond)
+                :respond
+                :render-template)
   (:export :math)
   (:documentation "The TeX math plugin."))
 (in-package :antimer.math)
@@ -125,16 +125,16 @@ MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
 @route app (:get "/tools/tex")
 (defview list-tex-macros ()
   (with-params (page)
-    (render-tool-template (+index+)
-                          :title "TeX Macros"
-                          :macros
-                          (crane:filter 'tex-macro))))
+    (render-template (+index+)
+                     :title "TeX Macros"
+                     :macros
+                     (crane:filter 'tex-macro))))
 
 @route app (:post "/tools/tex")
 (defview add-macro ()
   (flet ((render-error (message)
-           (render-tool-template (+index+)
-                                 :error message)))
+           (render-template (+index+)
+                            :error message)))
     (with-params (name definition)
       (if (and name definition)
           (if (lucerne-auth:logged-in-p)
