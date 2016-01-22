@@ -124,11 +124,10 @@ MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
 
 @route app (:get "/tools/tex")
 (defview list-tex-macros ()
-  (with-params (page)
-    (render-template (+index+)
-                     :title "TeX Macros"
-                     :macros
-                     (crane:filter 'tex-macro))))
+  (render-template (+index+)
+                   :title "TeX Macros"
+                   :macros
+                   (crane:filter 'tex-macro)))
 
 @route app (:post "/tools/tex")
 (defview add-macro ()
@@ -149,7 +148,6 @@ MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
 
 @route app (:post "/tools/tex/:name")
 (defview update-macro (name)
-  (print name)
   (if (lucerne-auth:logged-in-p)
       (let ((macro (find-macro name)))
         (with-params (definition)
@@ -161,7 +159,6 @@ MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
 
 @route app (:delete "/tools/tex/:name")
 (defview update-macro (name)
-  (print name)
   (if (lucerne-auth:logged-in-p)
       (let ((macro (find-macro name)))
         (if macro
