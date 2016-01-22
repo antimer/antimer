@@ -186,11 +186,7 @@
       :position absolute
       :text-align center
       :width 100px
-      :left -100px
-
-      :height 30px
-      :top 15px
-      :font-size 30px)
+      :left -100px)
 
      ((:and .link ":before")
       :content "'§'"))
