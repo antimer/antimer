@@ -61,7 +61,6 @@
 
 (defmacro render-view (template &rest arguments)
   `(render-template (,template)
-                    :wiki-name (wiki-name *wiki*)
                     :user (lucerne-auth:get-userid)
                     ,@arguments))
 

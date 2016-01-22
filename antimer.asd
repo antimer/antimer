@@ -19,6 +19,7 @@
                ;; Web interface
                :lucerne
                :lucerne-auth
+               :djula
                :clack-handler-hunchentoot
                ;; Command line
                :command-line-arguments
@@ -53,6 +54,7 @@
                  (:file "static")
                  (:file "diff")
                  (:file "doc")
+                 (:file "djula")
                  (:module "core"
                   :serial t
                   :components
