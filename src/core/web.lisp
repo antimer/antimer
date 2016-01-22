@@ -59,31 +59,27 @@
 
 ;;; Views
 
-(defmacro render-view (template &rest arguments)
-  `(render-template (,template)
-                    ,@arguments))
-
 @route app "/"
 (defview index ()
-  (render-view +index+))
+  (render-template (+index+)))
 
 ;;; Wiki views
 
 @route app (:get "/article/new")
 (defview get-new-article ()
   (if (lucerne-auth:logged-in-p)
-      (render-view +new-article+
-                   :title "New Article")
-      (render-view +new-article+
-                   :title "New Article"
-                   :error "You must be logged in to create an article.")))
+      (render-template (+new-article+)
+                       :title "New Article")
+      (render-template (+new-article+)
+                       :title "New Article"
+                       :error "You must be logged in to create an article.")))
 
 @route app (:post "/article/new")
 (defview post-new-article ()
   (if (lucerne-auth:logged-in-p)
       (flet ((render-error (message)
-               (render-view +new-article+
-                            :error message)))
+               (render-template (+new-article+)
+                                :error message)))
         (with-params (title slug source)
           (cond
             ((null title)
@@ -103,68 +99,68 @@
                                                 user)
                      (redirect (format nil "/article/~A" slug)))
                    (render-error "Bad username.")))))))
-      (render-view +new-article+
-                   :error "You must be logged in to create an article.")))
+      (render-template (+new-article+)
+                       :error "You must be logged in to create an article.")))
 
 @route app (:get "/article/all")
 (defview all-articles ()
-  (render-view +article-list+
-               :title "All Articles"
-               :articles
-               (let ((list (list)))
-                 (antimer.db:do-articles (article)
-                   (push article list))
-                 list)))
+  (render-template (+article-list+)
+                   :title "All Articles"
+                   :articles
+                   (let ((list (list)))
+                     (antimer.db:do-articles (article)
+                       (push article list))
+                     list)))
 
 @route app (:get "/article/:slug")
 (defview view-article (slug)
   (flet ((render-error (message)
-           (render-view +view-article+
-                        :error message)))
+           (render-template (+view-article+)
+                            :error message)))
     (let ((article (antimer.db:find-article slug)))
       (if article
           (let* ((doc (antimer.doc:parse-document
                        (antimer.db:article-source article)))
                  (word-count (antimer.doc:word-count doc)))
-            (render-view +view-article+
-                         :title (antimer.db:article-title article)
-                         :slug slug
-                         :html (antimer.doc:render-document doc)
-                         :word-count word-count
-                         :read-time (antimer.doc:time-to-read word-count)))
+            (render-template (+view-article+)
+                             :title (antimer.db:article-title article)
+                             :slug slug
+                             :html (antimer.doc:render-document doc)
+                             :word-count word-count
+                             :read-time (antimer.doc:time-to-read word-count)))
           (render-error "No such article.")))))
 
 @route app (:get "/article/:slug/edit")
 (defview get-edit-article (slug)
   (flet ((render-error (message)
-           (render-view +edit-article+
-                        :error message)))
+           (render-template (+edit-article+)
+                            :error message)))
     (let ((article (antimer.db:find-article slug)))
       (if article
           (if (lucerne-auth:logged-in-p)
-              (render-view +edit-article+
-                           :title (antimer.db:article-title article)
-                           :slug slug
-                           :source (antimer.db:article-source article))
-              (render-view +error+
-                           :message "You need to be logged in to edit an article."))
+              (render-template (+edit-article+)
+                               :title (antimer.db:article-title article)
+                               :slug slug
+                               :source (antimer.db:article-source article))
+              (render-template (+error+)
+                               :message "You need to be logged in to edit an article."))
           (render-error "No such article.")))))
 
 @route app (:post "/article/:slug/edit")
 (defview post-edit-article (slug)
   (if (lucerne-auth:logged-in-p)
       (flet ((render-error (message)
-               (render-view +edit-article+
-                            :error message)))
+               (render-template (+edit-article+)
+                                :error message)))
         (with-params (source message)
           (cond
             ((null source)
              (render-error "Can't create an empty article"))
             ((null message)
-             (render-view +edit-article+
-                          :error "You must write a description of the changes."
-                          :slug slug
-                          :source source))
+             (render-template (+edit-article+)
+                              :error "You must write a description of the changes."
+                              :slug slug
+                              :source source))
             (t
              ;; Validate everything
              (let ((user (antimer.db:find-user (lucerne-auth:get-userid)))
@@ -177,33 +173,33 @@
                                               user)
                      (redirect (format nil "/article/~A" slug)))
                    (render-error "Bad username.")))))))
-      (render-view +error+
-                   :message "You must be logged in to create an article.")))
+      (render-template (+error+)
+                       :message "You must be logged in to create an article.")))
 
 @route app (:get "/article/:slug/changes")
 (defview changes (slug)
   (let ((article (antimer.db:find-article slug)))
     (if article
-        (render-view +article-changes+
-                     :title (antimer.db:article-title article)
-                     :slug slug
-                     :changes
-                     (let ((changes (list)))
-                       (antimer.db:do-changes (change article)
-                         (push change changes))
-                       changes))
-        (render-view +error+
-                     :message "No such article."))))
+        (render-template (+article-changes+)
+                         :title (antimer.db:article-title article)
+                         :slug slug
+                         :changes
+                         (let ((changes (list)))
+                           (antimer.db:do-changes (change article)
+                             (push change changes))
+                           changes))
+        (render-template (+error+)
+                         :message "No such article."))))
 
 ;;; Files
 
 @route app (:get "/file/new")
 (defview get-new-file ()
   (if (lucerne-auth:logged-in-p)
-      (render-view +new-file+
-                   :title "New File")
-      (render-view +error+
-                   :message "You must be logged in to upload a file.")))
+      (render-template (+new-file+)
+                       :title "New File")
+      (render-template (+error+)
+                       :message "You must be logged in to upload a file.")))
 
 (defun stream->string (stream)
   (trivial-utf-8:utf-8-bytes-to-string
@@ -239,8 +235,8 @@
           (antimer.db:create-file filename)
           (download-uploaded-file stream local-path))
         (respond "Uploaded successfully"))
-      (render-view +error+
-                   :message "You must be logged in to upload a file.")))
+      (render-template (+error+)
+                       :message "You must be logged in to upload a file.")))
 
 (defun serve-file (pathname)
   (let* ((content-type (or (trivial-mimes:mime-lookup pathname)
@@ -263,8 +259,8 @@
   (let ((file (antimer.db:find-file filename)))
     (if file
         (serve-file (antimer.file:file-path filename))
-        (render-view +error+
-                     :message "No such file."))))
+        (render-template (+error+)
+                         :message "No such file."))))
 
 ;;; Tools
 
@@ -274,9 +270,9 @@
   (setf (gethash title *tools*) slug))
 
 (defmacro render-tool-template ((view) &rest params)
-  `(render-view ,view
-                :tools *tools*
-                ,@params))
+  `(render-template (,view)
+                    :tools *tools*
+                    ,@params))
 
 @route app "/tools"
 (defview tools ()
@@ -287,8 +283,8 @@
 
 @route app (:get "/register")
 (defview get-register ()
-  (render-view +register+
-               :title "Register"))
+  (render-template (+register+)
+                   :title "Register"))
 
 @route app (:post "/register")
 (defview post-register ()
@@ -315,8 +311,8 @@
 
 @route app (:get "/login")
 (defview get-login ()
-  (render-view +login+
-               :title "Sign in"))
+  (render-template (+login+)
+                   :title "Sign in"))
 
 @route app (:post "/login")
 (defview post-login ()
