@@ -61,7 +61,6 @@
 
 (defmacro render-view (template &rest arguments)
   `(render-template (,template)
-                    :user (lucerne-auth:get-userid)
                     ,@arguments))
 
 @route app "/"
