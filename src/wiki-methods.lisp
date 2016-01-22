@@ -5,17 +5,17 @@
   (setf *wiki* wiki)
   (setf (slot-value wiki 'config)
         (antimer.config:parse (wiki-config-pathname wiki)))
-  (send (make-instance 'antimer.event:startup)))
+  (antimer.event:send (make-instance 'antimer.event:startup)))
 
 (defmethod stop ((wiki wiki))
-  (send (make-instance 'antimer.event:shutdown)))
+  (antimer.event:send (make-instance 'antimer.event:shutdown)))
 
 (defmethod apply-events ((wiki wiki) (event antimer.event:event))
   (with-slots (config) wiki
     (loop for plugin in (antimer.config:config-plugins config) do
       (antimer.plugin:on-event plugin event))))
 
-(defmethod send ((event antimer.event:event))
+(defmethod antimer.event:send ((event antimer.event:event))
   (apply-events *wiki* event))
 
 (defmethod antimer.plugin:on-event :before ((plugin antimer.plugin:plugin)
