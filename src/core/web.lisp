@@ -57,6 +57,12 @@
     (setf (getf djula::*template-arguments* :user)
           (lucerne-auth:get-userid))))
 
+(djula:def-tag-compiler antimer-get-tools ()
+  (lambda (stream)
+    (declare (ignore stream))
+    (setf (getf djula::*template-arguments* :tools)
+          *tools*)))
+
 ;;; Templates
 
 (djula:add-template-directory
@@ -283,7 +289,6 @@
 
 (defmacro render-tool-template ((view) &rest params)
   `(render-template (,view)
-                    :tools *tools*
                     ,@params))
 
 @route app "/tools"
