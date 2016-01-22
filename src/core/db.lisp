@@ -8,6 +8,7 @@
                 :data-directory
                 :on-event)
   (:import-from :antimer.event
+                :event
                 :startup
                 :shutdown)
   (:import-from :crane
@@ -17,9 +18,16 @@
                 :text
                 :bool
                 :timestamp)
+  ;; Plugin
   (:export :database
-           :register-table
-           :user
+           :register-table)
+  ;; Events
+  (:export :update-article
+           :event-id
+           :event-slug
+           :event-document)
+  ;; Models
+  (:export :user
            :user-username
            :user-email
            :user-password
@@ -76,6 +84,34 @@
 (defun register-table (table-name)
   "Register a table that will be created in the database on startup."
   (pushnew table-name *tables* :test #'eq))
+
+;;; Custom events
+
+(defclass update-article (event)
+  ((id :reader event-id
+       :initarg :id
+       :type integer
+       :documentation "The document's numeric ID.")
+   (slug :reader event-slug
+         :initarg :slug
+         :type string
+         :documentation "The article slug.")
+   (document :reader event-document
+             :initarg :document
+             :type common-doc:document
+             :documentation "The CommonDoc document."))
+  (:documentation "Sent whenever an article is created or updated."))
+
+(defun send-article-update (article)
+  "Parse an article, transform it, and send the transformed document down the
+pipeline."
+  (with-slots (crane:id slug source) article
+    (let ((doc (antimer.doc:transform-document (antimer.doc:parse-document source))))
+      (setf (common-doc:title doc) (article-title article))
+      (antimer.event:send (make-instance 'update-article
+                                         :id crane:id
+                                         :slug slug
+                                         :document doc)))))
 
 ;;; Tables
 
@@ -174,16 +210,18 @@
 (defun create-article (title slug source user
                        &optional (message "Created article"))
   "Create an article in the database."
-  (let ((article (crane:create 'article
-                               :title title
-                               :slug slug
-                               :source (clean-source source))))
+  (let* ((source (clean-source source))
+         (article (crane:create 'article
+                                :title title
+                                :slug slug
+                                :source source)))
     (crane:create 'change
                   :article (crane:id article)
                   :user (crane:id user)
                   :message message
                   :diff (antimer.diff:diff "" source)
                   :timestamp (local-time:now))
+    (send-article-update article)
     article))
 
 (defun edit-article (article source message user)
@@ -195,6 +233,7 @@ do nothing and return NIL."
                                      source)))
         (setf (article-source article) source)
         (crane:save article)
+        (send-article-update article)
         (crane:create 'change
                       :article (crane:id article)
                       :user (crane:id user)
@@ -210,7 +249,7 @@ do nothing and return NIL."
 
 (defun call-with-articles (function results-per-page from)
   (mapc function (crane:filter 'article
-                               `(:order-by (:desc :title))
+                               `(:order-by (:asc :title))
                                `(:limit ,results-per-page)
                                `(:offset ,from))))
 
