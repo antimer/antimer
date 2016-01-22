@@ -54,7 +54,6 @@
                  (:file "static")
                  (:file "diff")
                  (:file "doc")
-                 (:file "djula")
                  (:module "core"
                   :serial t
                   :components

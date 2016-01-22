@@ -40,6 +40,23 @@
 (defmethod short-description ((plugin web-app))
   "The web app plugin implements Antimer's web interface.")
 
+(defvar *tools* (make-hash-table :test #'equal))
+
+(defun register-tool (title slug)
+  (setf (gethash title *tools*) slug))
+
+;;; Djula extensions
+
+(djula:def-tag-compiler antimer-wiki-name ()
+  (lambda (stream)
+    (write-string (wiki-name *wiki*) stream)))
+
+(djula:def-tag-compiler antimer-get-user ()
+  (lambda (stream)
+    (declare (ignore stream))
+    (setf (getf djula::*template-arguments* :user)
+          (lucerne-auth:get-userid))))
+
 ;;; Templates
 
 (djula:add-template-directory
@@ -263,11 +280,6 @@
                          :message "No such file."))))
 
 ;;; Tools
-
-(defvar *tools* (make-hash-table :test #'equal))
-
-(defun register-tool (title slug)
-  (setf (gethash title *tools*) slug))
 
 (defmacro render-tool-template ((view) &rest params)
   `(render-template (,view)
