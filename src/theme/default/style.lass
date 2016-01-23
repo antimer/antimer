@@ -170,6 +170,11 @@
     (h2
      :border-bottom "1px solid #ccc")
 
+    ;;; Webkit fixes
+
+    (p
+     :position relative)
+
     ;;; Heading Style
 
     ((:or h1 h2 h3 h4 h5 h6)
@@ -200,7 +205,12 @@
     ;;; List Style
 
     ((:or ul ol)
-     :padding-left 25px)
+
+     (li
+      :margin-left 45px)
+
+     ((:and li ":not(:last-child)")
+      :margin-bottom 10px))
 
     (dl
      (dt
@@ -214,11 +224,21 @@
      ((:and dd ":not(:last-child)")
       :margin-bottom 20px))
 
+    ;;; Images
+
+    (img
+     :display block
+     :margin 70px auto)
+
+    ;;; Quotes
+
     (blockquote
      :border-left 3px solid "#e2e2e2"
      :padding 0 50px
      :margin-top 40px
      :margin-bottom 40px)
+
+    ;;; Tables
 
     (table
      :border-collapse collapse
