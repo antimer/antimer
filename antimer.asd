@@ -24,7 +24,11 @@
                ;; Command line
                :command-line-arguments
                ;; Search
-               :searchspace
+               :trivial-exe
+               :external-program
+               :find-port
+               :drakma
+               :cl-json
                ;; Configuration
                :cl-yaml
                ;; Assets
@@ -39,7 +43,8 @@
                :uuid
                :trivial-download
                :trivial-extract
-               :cl-ppcre)
+               :cl-ppcre
+               :ironclad)
   :build-operation program-op
   :build-pathname "antimer"
   :entry-point "antimer.cli:main"
@@ -58,10 +63,12 @@
                   :serial t
                   :components
                   ((:file "db")
+                   (:file "fonts")
                    (:file "file")
+                   (:file "cache")
                    (:file "web")
-                   (:file "math")
-                   (:file "fonts")))
+                   (:file "search")
+                   (:file "math")))
                  (:module "theme"
                   :serial t
                   :components
