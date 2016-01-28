@@ -133,11 +133,7 @@ pipeline."
    (adminp :reader user-admin-p
            :initarg :adminp
            :type bool
-           :documentation "Is the user an administrator?")
-   (token :reader user-api-token
-          :initarg :token
-          :type text
-          :documentation "The API token."))
+           :documentation "Is the user an administrator?"))
   (:documentation "Represents a user."))
 
 (defun create-user (username &key email plaintext-password adminp)
@@ -148,8 +144,7 @@ pipeline."
                 :password (cl-pass:hash plaintext-password
                                         :type :pbkdf2-sha256
                                         :iterations 30000)
-                :adminp adminp
-                :token (uuid:format-as-urn nil (uuid:make-v4-uuid))))
+                :adminp adminp))
 
 (defun find-user (username)
   "Find a user by their username. Return NIL if nothing is found."
