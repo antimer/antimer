@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <main class="search">
+    <header>
+      <form method="get" action="/search">
+        <input type="search" name="query" placeholder="Search">
+      </form>
+    </header>
+    <div class="results">
+      {% if results %}
+        <ul>
+          {% for result in results %}
+            <li>
+              <h3><a href="/article/{{ result.slug }}">{{ result.title }}</a></h3>
+              <ul>
+                {% for excerpt in result.excerpts %}
+                  <li>
+                    ...{{ excerpt | safe}}...
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="error">
+          No results
+        </div>
+      {% endif %}
+  </main>
+{% endblock %}
