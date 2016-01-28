@@ -11,9 +11,18 @@
   (:import-from :antimer.event
                 :startup
                 :shutdown)
+  (:import-from :antimer.web
+                :app)
+  (:import-from :lucerne
+                :route
+                :defview
+                :with-params
+                :respond
+                :render-template)
   (:export :search)
   (:documentation "The search engine plugin."))
 (in-package :antimer.search)
+(annot:enable-annot-syntax)
 
 ;;; Plugin definition
 
@@ -78,13 +87,16 @@
                             :direction :output
                             :if-exists :supersede
                             :if-does-not-exist :create)
-      (format stream "http.port: ~D~%" port))))
+      (format stream "http.port: ~D~%" port)
+      (format stream "cluster.routing.allocation.disk.threshold_enabled: false~%"))))
 
 (defun start-elastic (plugin)
   (with-slots (%process) plugin
     (setf %process
           (external-program:start (namestring (elastic-binary plugin))
                                   nil))))
+
+(defvar *port*)
 
 ;;; Elastic tools
 
@@ -131,6 +143,11 @@
                                         (cl-json:encode-json-to-string request))))
     (mapcar #'(lambda (hit)
                 (list :title (first (rest (assoc :title (rest (assoc :fields hit)))))
+                      :slug (antimer.db:article-slug
+                             (crane:single 'antimer.db:article
+                                           `(:where (:= id
+                                                        ,(parse-integer
+                                                          (rest (assoc :--id hit)))))))
                       :excerpts (rest (assoc :text (rest (assoc :highlight hit))))))
             (rest
              (assoc :hits
@@ -139,9 +156,20 @@
                             (cl-json:decode-json-from-string
                              (babel:octets-to-string response)))))))))
 
-(defun shutdown (server)
-  (drakma:http-request (server-uri server "_shutdown")
-                       :method :post))
+;;; Views
+
+(defparameter +search+ (djula:compile-template* "search/search.html"))
+
+@route app (:get "/search")
+(defview post-search ()
+  (with-params (query)
+    (if query
+        (let ((server (make-instance 'server :host "localhost" :port *port*)))
+          (render-template (+search+)
+                           :title (format nil "Results for ~S" query)
+                           :results (search-articles server query)))
+        (render-template (+search+)
+                         :title "Search"))))
 
 ;;; Events
 
@@ -153,6 +181,7 @@
     (let ((port (find-port:find-port)))
       (setf (plugin-port plugin) port)
       (configure-elastic plugin port)
+      (setf *port* port)
       (antimer.log:info :search "Starting Elasticsearch on port ~D" port)
       (start-elastic plugin))))
 
@@ -163,10 +192,12 @@
 
 (defmethod on-event ((plugin search) (event shutdown))
   "On shutdown, kill the process."
+  (makunbound '*port*)
   (when (slot-boundp plugin '%process)
     (with-server (server plugin)
       (antimer.log:info :search "Shutting down Elasticsearch")
-      (shutdown server))))
+      (external-program:signal-process (plugin-process plugin) :killed))
+    (slot-makunbound plugin '%process)))
 
 (defmethod on-event ((plugin search) (event antimer.db:update-article))
   "Receive a document, index its raw text."
