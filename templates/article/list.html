@@ -9,5 +9,15 @@
         </li>
       {% endfor %}
     </ul>
+    <div class="controls">
+      {% if page != 0 %}
+        <a href="/article/all?page={{ page|add:"-1" }}">
+          Prev
+        </a>
+      {% endif %}
+      <a href="/article/all?page={{ page|add:"1" }}">
+        Next
+      </a>
+    </div>
   </main>
 {% endblock %}
