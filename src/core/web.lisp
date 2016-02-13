@@ -126,13 +126,20 @@
 
 @route app (:get "/article/all")
 (defview all-articles ()
-  (render-template (+article-list+)
-                   :title "All Articles"
-                   :articles
-                   (let ((list (list)))
-                     (antimer.db:do-articles (article)
-                       (push article list))
-                     (reverse list))))
+  (with-params (page)
+    (let ((page (if page
+                    (parse-integer page :junk-allowed t)
+                    0))
+          (results-per-page 25))
+      (render-template (+article-list+)
+                       :title "All Articles"
+                       :page page
+                       :articles
+                       (let ((list (list)))
+                         (antimer.db:do-articles (article :results-per-page results-per-page
+                                                          :from (* results-per-page page))
+                           (push article list))
+                         (reverse list))))))
 
 @route app (:get "/article/:slug")
 (defview view-article (slug)
