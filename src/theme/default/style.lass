@@ -1,12 +1,20 @@
-(:let ((pt-sans "'PT Sans', sans-serif")
+(:let (;; Fonts
+       (pt-sans "'PT Sans', sans-serif")
+       (sans-serif "'Lato', sans-serif")
        (navbar-font "'Lato', sans-serif")
        (article-heading-font "'Crimson Text', 'Palatino Linotype', serif")
        (article-text-font "'et-book', 'Palatino Linotype', serif")
-       (article-base-font-size "22px")
-       (article-header-height "300px")
        (bottom-bar-font "'Source Sans Pro', 'Helvetica Neue', sans-serif")
+
+       ;; Font properties
+       (article-base-font-size "22px")
+
+       ;; Colors
        (heading-text-color "#222")
        (body-text-color "#333")
+
+       ;; Sizes
+       (article-header-height "300px")
        (input-group-height "60px"))
 
   (:import "url('https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic')")
@@ -363,6 +371,7 @@
       :text-transform uppercase
       :font-weight bold
       :line-height 20px
+      :padding-top 5px
       :padding-left 10px
 
       :font-family #(pt-sans)
@@ -383,7 +392,9 @@
      :border-bottom "1px solid #ccc")
 
     ((:and input (:= type submit))
-     :background :transparent
+     :font-family #(sans-serif)
+     :font-size 1.2em
+     :background transparent
      :padding "10px 8px"
      :cursor pointer)))
 

@@ -214,7 +214,7 @@ pipeline."
                   :article (crane:id article)
                   :user (crane:id user)
                   :message message
-                  :diff (antimer.diff:diff "" source)
+                  :diff (antimer.diff:diff-to-string (antimer.diff:diff "" source))
                   :timestamp (local-time:now))
     (send-article-update article)
     article))
