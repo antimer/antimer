@@ -12,10 +12,6 @@
                :thorn
                :common-doc-tex
                :common-doc-gnuplot
-               ;; Database
-               :crane
-               :cl-pass
-               :dbd-sqlite3
                ;; Web interface
                :lucerne
                :lucerne-auth
