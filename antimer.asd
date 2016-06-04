@@ -12,11 +12,8 @@
                :thorn
                :common-doc-tex
                :common-doc-gnuplot
-               ;; Web interface
-               :lucerne
-               :lucerne-auth
+               ;; Templates
                :djula
-               :clack-handler-hunchentoot
                ;; Command line
                :command-line-arguments
                ;; Search
