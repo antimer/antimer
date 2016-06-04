@@ -1,6 +1,9 @@
 (in-package :cl-user)
 (defpackage antimer.build
   (:use :cl :antimer.wiki)
+  (:import-from :antimer.plugin
+                :static-generator
+                :generate)
   (:documentation "Building the wiki."))
 (in-package :antimer.build)
 
