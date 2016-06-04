@@ -16,12 +16,6 @@
                :djula
                ;; Command line
                :command-line-arguments
-               ;; Search
-               :trivial-exe
-               :external-program
-               :find-port
-               :drakma
-               :cl-json
                ;; Configuration
                :cl-yaml
                ;; Assets
@@ -29,15 +23,7 @@
                :lass-flexbox
                ;; Utilities
                :uiop
-               :alexandria
-               :difflib
-               :split-sequence
-               :yason
-               :uuid
-               :trivial-download
-               :trivial-extract
-               :cl-ppcre
-               :ironclad)
+               :alexandria)
   :build-operation program-op
   :build-pathname "antimer"
   :entry-point "antimer.cli:main"
