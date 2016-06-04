@@ -27,38 +27,7 @@
   :build-operation program-op
   :build-pathname "antimer"
   :entry-point "antimer.cli:main"
-  :components ((:module "src"
-                :serial t
-                :components
-                ((:file "event")
-                 (:file "config")
-                 (:file "wiki")
-                 (:file "plugin")
-                 (:file "log")
-                 (:file "static")
-                 (:file "diff")
-                 (:file "doc")
-                 (:module "core"
-                  :serial t
-                  :components
-                  ((:file "db")
-                   (:file "fonts")
-                   (:file "file")
-                   (:file "cache")
-                   (:file "web")
-                   (:file "search")
-                   (:file "math")))
-                 (:module "theme"
-                  :serial t
-                  :components
-                  ((:module "default"
-                    :serial t
-                    :components
-                    ((:static-file "style.lass")
-                     (:file "theme")))))
-                 (:file "wiki-methods")
-                 (:file "macros")
-                 (:file "cli"))))
+  :components ()
   :description "A wiki."
   :long-description
   #.(uiop:read-file-string
