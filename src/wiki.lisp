@@ -1,12 +1,13 @@
 (in-package :cl-user)
 (defpackage antimer.wiki
   (:use :cl)
-  (:export :wiki
-           :*wiki*)
+  ;; Classes
+  (:export :wiki)
   ;; Accessors
   (:export :wiki-name
            :wiki-directory
-           :wiki-config)
+           :wiki-config
+           :wiki-plugins)
   ;; Methods
   (:export :wiki-config-pathname
            :wiki-static-directory)
@@ -28,10 +29,12 @@
    (config :reader wiki-config
            :initarg :config
            :type hash-table
-           :documentation "The wiki configuration."))
+           :documentation "The wiki configuration.")
+   (plugins :reader wiki-plugins
+            :initarg :plugins
+            :type list
+            :documentation "A list of plugin instances."))
   (:documentation "The base wiki class."))
-
-(defvar *wiki*)
 
 ;;; Methods
 
@@ -41,9 +44,21 @@
   (:method ((wiki wiki))
     (merge-pathnames #p"config.yaml" (wiki-directory wiki))))
 
+(defgeneric wiki-articles-directory (wiki)
+  (:documentation "Return the absolute pathname to the wiki's article directory.")
+
+  (:method ((wiki wiki))
+    (merge-pathnames #p"articles/" (wiki-directory wiki))))
+
 (defgeneric wiki-static-directory (wiki)
   (:documentation "Return the absolute pathname to the wiki's static files
   directory.")
 
   (:method ((wiki wiki))
     (merge-pathnames #p"static/" (wiki-directory wiki))))
+
+(defgeneric wiki-build-directory (wiki)
+  (:documentation "The absolute pathname to the wiki's build directory.")
+
+  (:method ((wiki wiki))
+    (merge-pathnames #p"build/" (wiki-directory wiki))))
