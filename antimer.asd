@@ -23,11 +23,22 @@
                :lass-flexbox
                ;; Utilities
                :uiop
-               :alexandria)
+               :alexandria
+               :trivial-download)
   :build-operation program-op
   :build-pathname "antimer"
   :entry-point "antimer.cli:main"
-  :components ()
+  :components ((:module "src"
+                :serial t
+                :components
+                ((:file "log")
+                 (:file "wiki")
+                 (:file "plugin")
+                 (:file "static")
+                 (:file "build")
+                 (:module "plugins"
+                  :components
+                  ((:file "fonts"))))))
   :description "A wiki."
   :long-description
   #.(uiop:read-file-string
