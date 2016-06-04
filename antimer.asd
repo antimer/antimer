@@ -3,9 +3,9 @@
   :maintainer "Fernando Borretti <eudoxiahp@gmail.com>"
   :license "MIT"
   :version "0.2"
-  :homepage ""
-  :bug-tracker ""
-  :source-control (:git "")
+  :homepage "https://github.com/antimer/antimer"
+  :bug-tracker "https://github.com/antimer/antimer/issues"
+  :source-control (:git "git@github.com:antimer/antimer.git")
   :depends-on (;; Documents
                :common-doc
                :pandocl
