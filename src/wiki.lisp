@@ -10,7 +10,9 @@
            :wiki-plugins)
   ;; Methods
   (:export :wiki-config-pathname
-           :wiki-static-directory)
+           :wiki-articles-directory
+           :wiki-static-directory
+           :wiki-build-directory)
   (:documentation "The wiki object."))
 (in-package :antimer.wiki)
 
