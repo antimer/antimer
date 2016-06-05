@@ -31,10 +31,12 @@
               :documentation "The absolute pathname to the wiki directory.")
    (config :reader wiki-config
            :initarg :config
+           :initform (make-hash-table :test #'equal)
            :type hash-table
            :documentation "The wiki configuration.")
    (plugins :accessor wiki-plugins
             :initarg :plugins
+            :initform (list)
             :type list
             :documentation "A list of plugin instances."))
   (:documentation "The base wiki class."))
