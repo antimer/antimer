@@ -1,6 +1,8 @@
 (in-package :cl-user)
 (defpackage antimer.article
   (:use :cl)
+  (:import-from :antimer.wiki
+                :wiki)
   (:documentation "Antimer's article class."))
 (in-package :antimer.article)
 
@@ -45,3 +47,14 @@
   (:documentation "Represents a change to an article."))
 
 ;;; Methods
+
+(defmethod parse-article ((wiki wiki) (pathname pathname))
+  "Given a wiki and an absolute path to an article, return an article object."
+  (multiple-value-bind (front-matter text)
+      (yaml-front-matter:parse (uiop:read-file-string pathname))
+    (let ((front-matter (cl-yaml:parse front-matter))
+          (document (antimer.doc:parse-document text)))
+      (make-instance 'article
+                     :title (gethash "title" front-matter)
+                     :document document
+                     :changes (parse-changes wiki pathname)))))
