@@ -2,7 +2,23 @@
 (defpackage antimer.article
   (:use :cl)
   (:import-from :antimer.wiki
-                :wiki)
+                :wiki
+                :wiki-directory)
+  ;; Classes
+  (:export :article
+           :change)
+  ;; Accessors
+  (:export :article-title
+           :article-document
+           :article-changes)
+  (:export :change-summary
+           :change-description
+           :change-author-name
+           :change-author-email
+           :change-timestamp)
+  ;; Methods
+  (:export :parse-article
+           :parse-changes)
   (:documentation "Antimer's article class."))
 (in-package :antimer.article)
 
@@ -58,3 +74,19 @@
                      :title (gethash "title" front-matter)
                      :document document
                      :changes (parse-changes wiki pathname)))))
+
+(defmethod parse-changes ((wiki wiki) (pathname pathname))
+  "Given a wiki and an absolute pathname to an article, return a vector of
+change objects."
+  (let ((directory (wiki-directory wiki)))
+    (map 'vector
+         #'(lambda (hash)
+             (declare (type string hash))
+             (let ((commit (git-file-history:view-commit directory hash)))
+               (make-instance 'change
+                              :summary (getf commit :summary)
+                              :description (getf commit :description)
+                              :author-name (getf commit :name)
+                              :author-email (getf commit :email)
+                              :timestamp (getf commit :timestamp))))
+         (git-file-history:commits directory pathname))))
