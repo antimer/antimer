@@ -12,7 +12,8 @@
   (:export :wiki-config-pathname
            :wiki-articles-directory
            :wiki-static-directory
-           :wiki-build-directory)
+           :wiki-build-directory
+           :wiki-temporary-directory)
   (:documentation "The wiki object."))
 (in-package :antimer.wiki)
 
@@ -32,7 +33,7 @@
            :initarg :config
            :type hash-table
            :documentation "The wiki configuration.")
-   (plugins :reader wiki-plugins
+   (plugins :accessor wiki-plugins
             :initarg :plugins
             :type list
             :documentation "A list of plugin instances."))
@@ -64,3 +65,9 @@
 
   (:method ((wiki wiki))
     (merge-pathnames #p"build/" (wiki-directory wiki))))
+
+(defgeneric wiki-temporary-directory (wiki)
+  (:documentation "The absolute pathname to the wiki's temporary directory.")
+
+  (:method ((wiki wiki))
+    (merge-pathnames #p"_temp/" (wiki-directory wiki))))
