@@ -24,7 +24,10 @@
                ;; Utilities
                :uiop
                :alexandria
-               :trivial-download)
+               :trivial-download
+               :yaml-front-matter
+               :git-file-history
+               :local-time)
   :build-operation program-op
   :build-pathname "antimer"
   :entry-point "antimer.cli:main"
@@ -36,6 +39,7 @@
                  (:file "wiki")
                  (:file "plugin")
                  (:file "static")
+                 (:file "article")
                  (:file "build")
                  (:module "plugins"
                   :components
