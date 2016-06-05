@@ -20,4 +20,5 @@
     ;; Generate the articles
     (format t "Generating articles")
     (dolist (pathname (uiop:directory-files (wiki-articles-directory wiki)))
-      (format t "Compiling pathname ~A" pathname))))
+      (format t "Compiling pathname ~A" pathname))
+    (values)))
