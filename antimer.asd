@@ -38,7 +38,8 @@
                  (:file "build")
                  (:module "plugins"
                   :components
-                  ((:file "fonts"))))))
+                  ((:file "fonts")))
+                 (:file "standard"))))
   :description "A wiki."
   :long-description
   #.(uiop:read-file-string
