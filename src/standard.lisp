@@ -1,6 +1,7 @@
 (in-package :cl-user)
 (defpackage antimer.standard
   (:use :cl :antimer.wiki)
+  (:export :standard-wiki)
   (:documentation "The standard Antimer Wiki class."))
 (in-package :antimer.standard)
 
