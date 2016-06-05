@@ -18,12 +18,10 @@
 (test antimer
   (let ((wiki (make-instance 'antimer.standard::standard-wiki
                              :directory +wiki-dir+)))
+    (is-false (probe-file (antimer.wiki:wiki-temporary-directory wiki)))
     (finishes
-      (antimer.build:build wiki))))
+      (antimer.build:build wiki))
+    (is-false (probe-file (antimer.wiki:wiki-temporary-directory wiki)))))
 
 (defun run-tests ()
-  (unwind-protect
-       (progn
-         (ensure-directories-exist +wiki-dir+)
-         (run! 'tests))
-    (uiop:delete-directory-tree +wiki-dir+ :validate t)))
+  (run! 'tests))
