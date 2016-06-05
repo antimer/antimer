@@ -85,7 +85,7 @@ change objects."
              (let ((commit (git-file-history:view-commit directory hash)))
                (make-instance 'change
                               :summary (getf commit :summary)
-                              :description (getf commit :description)
+                              :description (or (getf commit :description) "")
                               :author-name (getf commit :name)
                               :author-email (getf commit :email)
                               :timestamp (getf commit :timestamp))))
