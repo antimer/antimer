@@ -17,8 +17,11 @@
     (dolist (plugin (wiki-plugins wiki))
      (when (typep plugin 'static-generator)
        (generate wiki plugin)))
+    ;; Delete the temporary directory
+    (when (probe-file (wiki-temporary-directory wiki))
+      (uiop:delete-directory-tree (wiki-temporary-directory wiki) :validate t))
     ;; Generate the articles
-    (format t "Generating articles")
+    (antimer.log:info :antimer "Compiling articles")
     (dolist (pathname (uiop:directory-files (wiki-articles-directory wiki)))
       (format t "Compiling pathname ~A" pathname))
     (values)))
