@@ -4,6 +4,7 @@
   (:import-from :antimer.plugin
                 :static-generator
                 :generate)
+  (:export :build)
   (:documentation "Building the wiki."))
 (in-package :antimer.build)
 
@@ -11,8 +12,8 @@
   (:documentation "Generate all the files necessary for the wiki.")
 
   (:method ((wiki wiki))
-    (format t "Generating static files...")
     ;; Generate static files through the plugins
+    (antimer.log:info :antimer "Generating static files")
     (dolist (plugin (wiki-plugins wiki))
      (when (typep plugin 'static-generator)
        (generate wiki plugin)))
