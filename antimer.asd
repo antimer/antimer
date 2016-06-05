@@ -32,6 +32,7 @@
                 :serial t
                 :components
                 ((:file "log")
+                 (:file "doc")
                  (:file "wiki")
                  (:file "plugin")
                  (:file "static")
