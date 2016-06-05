@@ -23,5 +23,6 @@
     ;; Generate the articles
     (antimer.log:info :antimer "Compiling articles")
     (dolist (pathname (uiop:directory-files (wiki-articles-directory wiki)))
-      (format t "Compiling pathname ~A" pathname))
+      (let ((article (antimer.article:parse-article wiki pathname)))
+        (print article)))
     (values)))
