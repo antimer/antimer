@@ -4,6 +4,7 @@
   (:import-from :antimer.wiki
                 :wiki
                 :wiki-temporary-directory)
+  (:export :fonts-plugin)
   (:documentation "The font downloader plugin."))
 (in-package :antimer.plugin.fonts)
 
