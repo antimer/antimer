@@ -38,6 +38,8 @@
     ;; Delete the temporary directory
     (when (probe-file (wiki-temporary-directory wiki))
       (uiop:delete-directory-tree (wiki-temporary-directory wiki) :validate t))
+    ;; HTML files
+    (ensure-directories-exist (wiki-build-directory wiki))
     (flet ((render (template pathname &rest arguments)
              (apply #'render-template (append (list wiki pathname template) arguments))))
       ;; Generate the articles
